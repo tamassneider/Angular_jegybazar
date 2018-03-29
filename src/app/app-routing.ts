@@ -9,6 +9,10 @@ import {SignInComponent} from './sign-in/sign-in.component';
 import {RegisterComponent} from './register/register.component';
 import {EventListComponent} from './event-list/event-list.component';
 import {EventDetailComponent} from './event-detail/event-detail.component';
+import {ProfileComponent} from './profile/profile.component';
+import {ProfileEditComponent} from './profile-edit/profile-edit.component';
+import {TicketsTableComponent} from './tickets-table/tickets-table.component';
+import {TicketDetailComponent} from './ticket-detail/ticket-detail.component';
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -20,11 +24,24 @@ const routes: Routes = [
       {path: ':id/edit', component: EventDetailComponent},
     ],
   },
-
-  {path: 'ticket', component: TicketComponent},
+  {
+    path: 'ticket', component: TicketComponent,
+    children: [
+      {path: 'table', component: TicketsTableComponent},
+      {path: 'new', component: TicketDetailComponent},
+      {path: ':id/bid', component: TicketDetailComponent}
+    ]
+  },
   {path: 'about', component: AboutComponent},
   {path: 'login', component: SignInComponent},
   {path: 'register', component: RegisterComponent},
+  {
+    path: 'user',
+    children: [
+      {path: '', component: ProfileComponent},
+      {path: 'edit', component: ProfileEditComponent}
+    ]
+  },
   {path: '', redirectTo: '/home', pathMatch: 'full'},
   {path: '**', component: PageNotFoundComponent},
 
@@ -43,8 +60,12 @@ export class AppRoutingModule {
     EventDetailComponent,
     EventListComponent,
     TicketComponent,
+    TicketDetailComponent,
+    TicketsTableComponent,
     AboutComponent,
     SignInComponent,
-    RegisterComponent
+    RegisterComponent,
+    ProfileComponent,
+    ProfileEditComponent
   ];
 }
