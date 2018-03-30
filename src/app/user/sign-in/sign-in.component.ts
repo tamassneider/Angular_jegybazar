@@ -7,6 +7,7 @@ import {UserService} from '../../shared/user.service';
   styleUrls: ['./sign-in.component.css']
 })
 export class SignInComponent implements OnInit {
+  public error: string;
 
   constructor(private _userService: UserService) { }
 
@@ -14,6 +15,12 @@ export class SignInComponent implements OnInit {
   }
 
   login(email: string, password: string) {
-    this._userService.login(email,password)
+    if (!this._userService.login(email, password)) {
+      this.error = 'Hiba a belépési adatokban. Próbáld újra.';
+    }
+  }
+
+  clearError() {
+    delete(this.error);
   }
 }

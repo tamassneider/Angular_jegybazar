@@ -25,6 +25,7 @@ import { TicketDetailComponent } from './ticket/ticket-detail/ticket-detail.comp
 import { EventCardComponent } from './event/event-card/event-card.component';
 import {EventService} from './shared/event.service';
 import {UserService} from './shared/user.service';
+import {AlertModule} from 'ngx-bootstrap';
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import {UserService} from './shared/user.service';
   imports: [
     BrowserModule,
     CollapseModule.forRoot(),
+    AlertModule.forRoot(),
     AppRoutingModule
   ],
   providers: [EventService, UserService],
