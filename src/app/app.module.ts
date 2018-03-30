@@ -23,6 +23,7 @@ import { TicketComponent } from './ticket/ticket.component';
 import { EventDetailComponent } from './event/event-detail/event-detail.component';
 import { TicketDetailComponent } from './ticket/ticket-detail/ticket-detail.component';
 import { EventCardComponent } from './event/event-card/event-card.component';
+import {EventService} from './shared/event.service';
 
 
 @NgModule({
@@ -54,7 +55,7 @@ import { EventCardComponent } from './event/event-card/event-card.component';
     CollapseModule.forRoot(),
     AppRoutingModule
   ],
-  providers: [],
+  providers: [EventService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
