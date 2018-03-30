@@ -25,6 +25,15 @@
 
   <!-- cards -->
   <div class="card-deck pt-5 pb-5">
+    <app-event-card
+      class="col col-md-6 col-lg-4"
+      *ngFor="let ev of events"
+      [esemeny]= "ev"
+    >
+      {{ev.name}}
+    </app-event-card>
+
+<!--  <div class="card-deck pt-5 pb-5">
 
     <app-event-card class="col col-md-6 col-lg-4"></app-event-card>
     <app-event-card class="col col-md-6 col-lg-4"></app-event-card>
@@ -39,6 +48,14 @@
     <app-event-card class="col col-md-6 col-lg-4"></app-event-card>
 
   </div>
+
+  <div class="card-deck pt-5 pb-5">
+
+    <app-event-card class="col col-md-6 col-lg-4"></app-event-card>
+    <app-event-card class="col col-md-6 col-lg-4"></app-event-card>
+    <app-event-card class="col col-md-6 col-lg-4"></app-event-card>
+
+  </div>-->
 
 
 

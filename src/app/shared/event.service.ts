@@ -62,6 +62,13 @@ export class EventService {
         'date': '2018-11-23',
         'pictureURL': 'assets/diotoro.jpg',
         'description': 'Lorem ipsum dolor sit amet.'
+      },
+      {
+        'id': 9,
+        'name': 'Diótörő Balett',
+        'date': '2018-11-23',
+        'pictureURL': 'assets/diotoro.jpg',
+        'description': 'Lorem ipsum dolor sit amet.'
       }
     ];
   }
