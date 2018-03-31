@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+  import { Injectable } from '@angular/core';
 import {Router} from '@angular/router';
 import {UserModel} from './user-model';
 import {assertNumber} from '@angular/core/src/render3/assert';
@@ -72,4 +72,7 @@ export class UserService {
     return user.length > 0 ? user[0] : new UserModel(UserModel.emptyUser);
   }
 
+  getCurrentUser() {
+   return this._user;
+  }
 }

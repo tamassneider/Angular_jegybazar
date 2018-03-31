@@ -14,6 +14,7 @@ import {ProfileEditComponent} from './user/profile-edit/profile-edit.component';
 import {TicketsTableComponent} from './ticket/tickets-table/tickets-table.component';
 import {TicketDetailComponent} from './ticket/ticket-detail/ticket-detail.component';
 import {LicitComponent} from './ticket/licit/licit.component';
+import {LoggedInGuard} from './shared/logged-in.guard';
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -37,8 +38,8 @@ const routes: Routes = [
   {
     path: 'user',
     children: [
-      {path: '', component: ProfileComponent},
-      {path: 'edit', component: ProfileEditComponent},
+      {path: '', component: ProfileComponent, canActivate: [LoggedInGuard]},
+      {path: 'edit', component: ProfileEditComponent, canActivate: [LoggedInGuard]},
       {path: 'login', component: SignInComponent},
       {path: 'register', component: RegisterComponent},
     ]
