@@ -28,6 +28,7 @@ import {UserService} from './shared/user.service';
 import {AlertModule} from 'ngx-bootstrap';
 import {TicketService} from './shared/ticket.service';
 import {LoggedInGuard} from './shared/logged-in.guard';
+import {FormsModule} from '@angular/forms';
 
 
 @NgModule({
@@ -56,6 +57,7 @@ import {LoggedInGuard} from './shared/logged-in.guard';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     CollapseModule.forRoot(),
     AlertModule.forRoot(),
     AppRoutingModule
