@@ -21,7 +21,7 @@ export class UserService {
         'gender': 'male'
       }),
       new UserModel ({
-        'id': 1,
+        'id': 2,
         'name': 'Jani ba',
         'email': 'janiba@valami.hu',
         'address': 'utca 5',
@@ -29,7 +29,7 @@ export class UserService {
         'gender': 'male'
       }),
       new UserModel ({
-        'id': 1,
+        'id': 3,
         'name': 'Jozsi ba',
         'email': 'jozsiba@valami.hu',
         'address': 'utca 8',
@@ -67,7 +67,7 @@ export class UserService {
     console.log('signed-in: ', this.isLoggedin);
   }
 
-  getUserById(id:number) {
+  getUserById(id: number) {
     const user = this._allUsers.filter(u => u.id === id);
     return user.length > 0 ? user[0] : new UserModel(UserModel.emptyUser);
   }

@@ -16,8 +16,6 @@ export class TicketModel {
   seller?: UserModel;
 
   constructor(param?: TicketModel) {
-    if (param) {
       Object.assign(this, param);
-    }
   }
 }
