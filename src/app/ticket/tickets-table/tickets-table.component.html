@@ -36,12 +36,13 @@
     </thead>
 
     <tbody>
-    <tr>
-      <td scope="row" data-toggle="tooltip" data-placement="bottom" title="Még 3 napig lehet licitálni, az esemény megtekintéséhez kattints ide"><a href="#">Sziget fesztivál</a></td>
-      <td>2018.08.03. 13:00</td>
-      <td>Példa Jóska</td>
-      <td>3db</td>
-      <td><a [routerLink]="['/ticket',5,'bid']">Tovább a licithez</a></td>
+    <tr *ngFor="let ticket of tickets">
+      <td scope="row">
+        <a [routerLink]="['/event', ticket.eventId]">{{ ticket.event.name}</a></td>
+      <td> {{ ticket.date }}</td>
+      <td> {{ ticket.seller.name }}</td>
+      <td> {{ticket.numberOfTickets}}</td>
+      <td><a [routerLink]="['/ticket',ticket.id,'bid']">Tovább a licithez</a></td>
     </tr>
 
     </tbody>
