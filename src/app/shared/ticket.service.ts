@@ -13,36 +13,27 @@ export class TicketService {
       new TicketModel({
         'id': 1,
         'date': '2019-05-02',
-        'artist': 'Iron Maiden',
         'numberOfTickets': 5,
         'minimalBidPrice': 2000,
         'bidStep': 500,
-        'bidStartDate': '2018-11-05',
-        'bidEndDate': '2018-12-05',
         'eventId': 1,
         'sellerUserId': 1
       }),
       new TicketModel({
         'id': 2,
         'date': '2019-10-12',
-        'artist': 'Judas Priest',
         'numberOfTickets': 4,
         'minimalBidPrice': 4000,
         'bidStep': 1000,
-        'bidStartDate': '2018-11-05',
-        'bidEndDate': '2018-12-05',
         'eventId': 1,
         'sellerUserId': 2
       }),
       new TicketModel({
         'id': 6,
         'date': '2019-11-06',
-        'artist': 'Black Label Society',
         'numberOfTickets': 1,
         'minimalBidPrice': 15000,
         'bidStep': 1500,
-        'bidStartDate': '2018-11-05',
-        'bidEndDate': '2018-12-05',
         'eventId': 2,
         'sellerUserId': 3
       })
@@ -61,5 +52,25 @@ export class TicketService {
 
   getEventNameById(id: number) {
     return this._eventService.getEventById(id).name;
+  }
+  getTicketById(id: number) {
+    const tic = this._tickets.filter( (x) => x.id === id);
+    return tic.length
+  }
+  create(param: TicketModel) {
+    this._tickets = [
+      ...this._tickets,
+        new TicketModel ({
+          id: this._getMaxId(),
+          ...param,
+          event: this._eventService.getEventById(param.eventId),
+          seller: this._userService.getUserById(param.sellerUserId)
+        })
+    ];
+    console.log(this._tickets);
+  }
+
+  private _getMaxId() {
+    return this._tickets.reduce((x, y) => x.id > y.id ? x : y).id + 1;
   }
 }

@@ -13,7 +13,7 @@ export class TicketsTableComponent implements OnInit {
   public tickets: TicketModel[];
 
   constructor(private _ticketService: TicketService,
-              private _userService: UserService,
+              public userService: UserService,
               private _eventService: EventService) { }
 
   ngOnInit() {

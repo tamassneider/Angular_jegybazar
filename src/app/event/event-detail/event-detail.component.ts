@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {EventModel} from '../../shared/event-model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EventService} from '../../shared/event.service';
+import {Location} from '@angular/common';
+import {UserService} from '../../shared/user.service';
 
 @Component({
   selector: 'app-event-detail',
@@ -10,10 +12,13 @@ import {EventService} from '../../shared/event.service';
 })
 export class EventDetailComponent implements OnInit {
   event: EventModel;
+  editForm = false;
 
   constructor(private _route: ActivatedRoute,
               private _eventService: EventService,
-              private _router: Router) { }
+              private _router: Router,
+              private _location: Location,
+              public userService: UserService) { }
 
   ngOnInit() {
     const evId = +this._route.snapshot.params['id']; // the + sign at the beginning converts the id to a number
@@ -21,6 +26,7 @@ export class EventDetailComponent implements OnInit {
       this.event = this._eventService.getEventById(evId);
     } else {
      this.event = new EventModel(EventModel.emptyEvent);
+     this.editForm = true;
     }
 
   }
@@ -33,7 +39,10 @@ export class EventDetailComponent implements OnInit {
       this._eventService.create(this.event);
       console.log('create');
     }
-    this._router.navigate(['/event/list'])
+    this._location.back();
+  }
+  navigateBack() {
+    this._location.back();
   }
 
 }

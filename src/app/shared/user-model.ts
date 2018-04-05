@@ -19,7 +19,7 @@ export class UserModel {
       email: 'legyekrekamatilda@valami.com',
       address: 'Futrinka utca',
       dateOfBirth: '2001.01.01',
-      gender: 'male'
+      gender: 'male',
     };
   }
 
@@ -30,7 +30,7 @@ export class UserModel {
       email: '',
       address: '',
       dateOfBirth: '',
-      gender: ''
+      gender: '',
     };
   }
 

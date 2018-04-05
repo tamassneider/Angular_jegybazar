@@ -6,27 +6,46 @@
 
     <div class="card-header">
       <div class="bg-light text-center">
-        <h3>Profil módosítása</h3>
+        <h3 *ngIf="user.id"> Profil módosítása</h3>
+        <h3 *ngIf="!user.id"> Regisztráció</h3>
       </div>
     </div>
 
     <div class="card-body">
 
       <!--card-body-->
-
+      <form #userForm="ngForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="nev">Név</label>
-        <input type="text" class="form-control mb-3" id="nev" placeholder="név">
+        <input type="text" class="form-control mb-3" id="nev" placeholder="név"
+               [(ngModel)]="user.name"
+               name="name"
+               required
+               #name="ngModel"
+        >
+        <alert type="danger" *ngIf="name.touched && name.invalid">Töltsd ki!!!</alert>
       </div>
 
       <div class="form-group">
         <label for="email">Email cím</label>
-        <input type="text" class="form-control mb-3" id="email" placeholder="email cím">
+        <input type="text" class="form-control mb-3" id="email" placeholder="email cím"
+               [(ngModel)]="user.email"
+               name="email"
+               required
+               #email="ngModel"
+        >
+        <alert type="danger" *ngIf="email.touched && email.invalid">Töltsd ki!!!</alert>
       </div>
 
       <div class="form-group">
         <label for="szul">Születési idő</label>
-        <input type="date" class="form-control mb-3" id="szul" placeholder="születési idő">
+        <input type="date" class="form-control mb-3" id="szul" placeholder="születési idő"
+               [(ngModel)]="user.dateOfBirth"
+               name="dateOfBirth"
+               required
+               #dateOfBirth="ngModel"
+        >
+        <alert type="danger" *ngIf="dateOfBirth.touched && dateOfBirth.invalid">Töltsd ki!!!</alert>
       </div>
 
       <div class="">
@@ -34,42 +53,74 @@
 
         <div class="form-check form-check-inline">
           <label class="form-check-label" for="fiu">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="fiu" value="option1">Fiú
+            <input class="form-check-input" type="radio" name="genderChoice" id="fiu"
+                   value="male"
+                   required
+                   [(ngModel)]="user.gender"
+                   name="gender"
+            >Fiú
           </label>
         </div>
 
         <div class="form-check form-check-inline">
           <label class="form-check-label" for="lany">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="lany" value="option2">Lány
+            <input class="form-check-input" type="radio" name="genderChoice" id="lany"
+                   value="female"
+                   required
+                   [(ngModel)]="user.gender"
+                   name="gender"
+            >Lány
           </label>
         </div>
 
       </div>
 
       <div class="form-group">
-        <label for="text">Település</label>
-        <select class="form-control mb-3">
+        <label for="address">Cím</label>
+        <select class="form-control mb-3" id="address"
+                [(ngModel)]="user.address"
+                name="address"
+                required
+                #address="ngModel"
+        >
           <option>Főváros</option>
           <option>Nagyváros</option>
           <option>Kistelepülés</option>
         </select>
       </div>
 
-      <div class="form-group">
-        <label for="jelszo1">Jelszó</label>
-        <input type="password" class="form-control mb-3" id="jelszo1" placeholder="Jelszó">
-      </div>
+      <ng-container *ngIf="!user.id">
+        <div class="form-group">
+          <label for="jelszo1">Jelszó</label>
+          <input type="password" class="form-control mb-3" id="jelszo1" placeholder="Jelszó"
+                 ngModel name="password1"
+                 #password1="ngModel"
+                 required
+          >
+        </div>
 
-      <div class="form-group">
-        <label for="jelszo2">Jelszó ismét</label>
-        <input type="password" class="form-control mb-3" id="jelszo2" placeholder="Jelszó ismét">
-      </div>
+        <div class="form-group">
+          <label for="jelszo2">Jelszó ismét</label>
+          <input type="password" class="form-control mb-3" id="jelszo2" placeholder="Jelszó ismét"
+                 ngModel name="password2"
+                 #password2="ngModel"
+                 required
+          >
+          <alert type="danger"
+                 *ngIf="password1.dirty && password2.dirty && (password1.invalid || password2.invalid || (password1.value!==password2.value))"
+          >Baj van a jelszavakkal</alert>
+        </div>
+      </ng-container>
+        <div class="text-center mb-3">
+          <button class="btn btn-primary btn-lg" type="submit">Mentés</button>
+        </div>
+
+      </form>
+
 
     </div>
 
-    <div class="text-center mb-3">
-      <input class="btn btn-primary btn-lg" type="submit" value="mentés" routerLink="../">
-    </div>
+
 
   </div>
 

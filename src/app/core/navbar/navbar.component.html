@@ -15,6 +15,7 @@
           <a class="nav-item nav-link btn btn-primary text-light ml-lg-2 btn-sm" routerLink="/user/register" >Regisztráció</a>
         </ng-container>
         <ng-template #loggedInBlock>
+          <a class="nav-item nav-link" routerLinkActive="active" routerLink="/user">Profilom</a>
           <a class="nav-item nav-link" routerLinkActive="active" (click)="logout()">Kilépés</a>
         </ng-template>
       </div>

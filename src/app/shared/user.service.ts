@@ -11,14 +11,35 @@ export class UserService {
   private _allUsers: UserModel[];
 
   constructor(private _router: Router) {
-    this._allUsers = [
+    this._allUsers = this._getMockData()
+  }
+
+  login(email: string, password: string) {
+    if (email === 'angular' && password === 'angular') {
+      this._user = this._allUsers[2];
+      this.isLoggedin = true;
+      return true;
+    }
+    console.log('signed-in: ', this.isLoggedin, this._user);
+    return false;
+  }
+  private _getMockData() {
+    return [
+      new UserModel ({
+        'id': 0,
+        'name': 'Tomi ba',
+        'email': 'tomiba@valami.hu',
+        'address': 'utca 0',
+        'dateOfBirth': '1990-03-04',
+        'gender': 'male',
+      }),
       new UserModel ({
         'id': 1,
         'name': 'Pista ba',
         'email': 'pistaba@valami.hu',
         'address': 'utca 3',
         'dateOfBirth': '1930-03-04',
-        'gender': 'male'
+        'gender': 'male',
       }),
       new UserModel ({
         'id': 2,
@@ -26,7 +47,7 @@ export class UserService {
         'email': 'janiba@valami.hu',
         'address': 'utca 5',
         'dateOfBirth': '1940-03-04',
-        'gender': 'male'
+        'gender': 'male',
       }),
       new UserModel ({
         'id': 3,
@@ -34,30 +55,29 @@ export class UserService {
         'email': 'jozsiba@valami.hu',
         'address': 'utca 8',
         'dateOfBirth': '1950-03-04',
-        'gender': 'male'
-      })
-    ];
+        'gender': 'male',
+      }),
+      ];
   }
 
-  login(email: string, password: string) {
-    if (email === 'angular' && password === 'angular') {
-      this._user = new UserModel(UserModel.exampleUser);
-      this.isLoggedin = true;
-      this._router.navigate(['/user']);
-    }
-    console.log('signed-in: ', this.isLoggedin);
-    return false;
-  }
+  register(param: UserModel) {
+    if (param) {
+      this._user = new UserModel({
+        id: 4,
+        ...param
+      });
 
-  register(param?: UserModel) {
-    if(param) {
-      this._user = new UserModel(param);
-    } else {
-      this._user = new UserModel(UserModel.exampleUser);
+      this._allUsers = [
+        ...this._allUsers,
+        this._user
+      ];
     }
+
+
     this.isLoggedin = true;
-    this._router.navigate(['/user']);
+
     console.log('signed-in: ', this.isLoggedin);
+    console.log(this._allUsers)
   }
 
   logout() {
@@ -66,13 +86,20 @@ export class UserService {
     this._router.navigate(['/home']);
     console.log('signed-in: ', this.isLoggedin);
   }
+  updateUser(param: UserModel) {
+    this._user = new UserModel(param);
+  }
 
   getUserById(id: number) {
-    const user = this._allUsers.filter(u => u.id === id);
+    const user = this._allUsers.filter(u => u.id === +id);
     return user.length > 0 ? user[0] : new UserModel(UserModel.emptyUser);
   }
 
   getCurrentUser() {
    return this._user;
   }
+  private _getMaxId() {
+    return this._allUsers.reduce((x, y) => x.id > y.id ? x : y).id + 1
+  }
+
 }

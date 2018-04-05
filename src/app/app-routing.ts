@@ -6,7 +6,6 @@ import {EventComponent} from './event/event.component';
 import {TicketComponent} from './ticket/ticket.component';
 import {AboutComponent} from './about/about.component';
 import {SignInComponent} from './user/sign-in/sign-in.component';
-import {RegisterComponent} from './user/register/register.component';
 import {EventListComponent} from './event/event-list/event-list.component';
 import {EventDetailComponent} from './event/event-detail/event-detail.component';
 import {ProfileComponent} from './user/profile/profile.component';
@@ -30,8 +29,8 @@ const routes: Routes = [
     path: 'ticket', component: TicketComponent,
     children: [
       {path: 'table', component: TicketsTableComponent},
-      {path: 'new', component: TicketDetailComponent},
-      {path: ':id/bid', component: LicitComponent}
+      {path: 'new', component: TicketDetailComponent, canActivate: [LoggedInGuard]},
+      {path: ':id', component: LicitComponent}
     ]
   },
   {path: 'about', component: AboutComponent},
@@ -41,7 +40,7 @@ const routes: Routes = [
       {path: '', component: ProfileComponent, canActivate: [LoggedInGuard]},
       {path: 'edit', component: ProfileEditComponent, canActivate: [LoggedInGuard]},
       {path: 'login', component: SignInComponent},
-      {path: 'register', component: RegisterComponent},
+      {path: 'register', component: ProfileEditComponent},
     ]
   },
   {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -67,7 +66,6 @@ export class AppRoutingModule {
     LicitComponent,
     AboutComponent,
     SignInComponent,
-    RegisterComponent,
     ProfileComponent,
     ProfileEditComponent
   ];
