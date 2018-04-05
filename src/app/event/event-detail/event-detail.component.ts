@@ -21,13 +21,13 @@ export class EventDetailComponent implements OnInit {
               public userService: UserService) { }
 
   ngOnInit() {
-    const evId = +this._route.snapshot.params['id']; // the + sign at the beginning converts the id to a number
-    if (evId) {
-      this.event = this._eventService.getEventById(evId);
-    } else {
-     this.event = new EventModel(EventModel.emptyEvent);
-     this.editForm = true;
-    }
+    // const evId = +this._route.snapshot.params['id']; // the + sign at the beginning converts the id to a number
+    // if (evId) {
+    //   this.event = this._eventService.getEventById(evId);
+    // } else {
+    //  this.event = new EventModel(EventModel.emptyEvent);
+    //  this.editForm = true;
+    // }
 
   }
 

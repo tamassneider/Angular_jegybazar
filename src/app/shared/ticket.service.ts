@@ -41,33 +41,33 @@ export class TicketService {
   }
 
   getAllTickets() {
-    return this._tickets.map(ticket => {
-      return {
-        ...ticket,
-        event: this._eventService.getEventById(ticket.eventId),
-        seller: this._userService.getUserById(ticket.sellerUserId)
-      };
-    });
+    // return this._tickets.map(ticket => {
+    //   return {
+    //     ...ticket,
+    //     event: this._eventService.getEventById(ticket.eventId),
+    //     seller: this._userService.getUserById(ticket.sellerUserId)
+    //   };
+    // });
   }
 
   getEventNameById(id: number) {
-    return this._eventService.getEventById(id).name;
+    // return this._eventService.getEventById(id).name;
   }
   getTicketById(id: number) {
     const tic = this._tickets.filter( (x) => x.id === id);
-    return tic.length
+    return tic.length;
   }
   create(param: TicketModel) {
-    this._tickets = [
-      ...this._tickets,
-        new TicketModel ({
-          id: this._getMaxId(),
-          ...param,
-          event: this._eventService.getEventById(param.eventId),
-          seller: this._userService.getUserById(param.sellerUserId)
-        })
-    ];
-    console.log(this._tickets);
+    // this._tickets = [
+    //   ...this._tickets,
+    //     new TicketModel ({
+    //       id: this._getMaxId(),
+    //       ...param,
+    //       event: this._eventService.getEventById(param.eventId),
+    //       seller: this._userService.getUserById(param.sellerUserId)
+    //     })
+    // ];
+    // console.log(this._tickets);
   }
 
   private _getMaxId() {

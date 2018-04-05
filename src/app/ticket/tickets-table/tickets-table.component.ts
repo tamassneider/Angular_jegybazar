@@ -17,7 +17,7 @@ export class TicketsTableComponent implements OnInit {
               private _eventService: EventService) { }
 
   ngOnInit() {
-    this.tickets = this._ticketService.getAllTickets();
+  //  this.tickets = this._ticketService.getAllTickets();
     console.log(this.tickets);
   }
 

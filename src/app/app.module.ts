@@ -27,6 +27,7 @@ import {AlertModule} from 'ngx-bootstrap';
 import {TicketService} from './shared/ticket.service';
 import {LoggedInGuard} from './shared/logged-in.guard';
 import {FormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
 
 
 @NgModule({
@@ -57,7 +58,8 @@ import {FormsModule} from '@angular/forms';
     FormsModule,
     CollapseModule.forRoot(),
     AlertModule.forRoot(),
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [EventService, UserService, TicketService, LoggedInGuard],
   bootstrap: [AppComponent]
