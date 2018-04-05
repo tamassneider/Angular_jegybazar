@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {UserService} from '../../shared/user.service';
 import {Router} from '@angular/router';
+import {UserModel} from '../../shared/user-model';
 
 @Component({
   selector: 'app-sign-in',
@@ -17,11 +18,13 @@ export class SignInComponent implements OnInit {
   }
 
   login(email: string, password: string) {
-    if (!this._userService.login(email, password)) {
-      this.error = 'Hiba a belépési adatokban. Próbáld újra.';
-    } else {
+    this._userService.login(email, password).subscribe(
+    (user: UserModel) => {
+      console.log('login complete', user);
       this._router.navigate(['/user']);
-    }
+    },
+      err => console.warn( 'error in login', err)
+    );
   }
 
   clearError() {
