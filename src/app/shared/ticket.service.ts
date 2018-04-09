@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {TicketModel} from './ticket-model';
 import {EventService} from './event.service';
 import {UserService} from './user.service';
@@ -12,6 +12,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 import {EventModel} from './event-model';
 import {UserModel} from './user-model';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/observable/combineLatest';
 
 
 @Injectable()
@@ -27,24 +29,24 @@ export class TicketService {
     return this._http.get(`${environment.firebase.baseUrl}/tickets.json`)
       .map(ticketObject => Object.values(ticketObject))
       .map(ticketsArray => ticketsArray.map(tm =>
-      Observable.zip(
-        Observable.of(tm),
-        this._eventService.getEventById(tm.eventId),
-        this._userService.getUserById(tm.sellerUserId),
-        (t: TicketModel, e: EventModel, u: UserModel) => {
-          return {
-            ...t,
-            event: e,
-            seller: u
-          };
-        }
-      )))
+        Observable.zip(
+          Observable.of(tm),
+          this._eventService.getEventById(tm.eventId),
+          this._userService.getUserById(tm.sellerUserId),
+          (t: TicketModel, e: EventModel, u: UserModel) => {
+            return {
+              ...t,
+              event: e,
+              seller: u
+            };
+          }
+        )))
       .switchMap(zipStremArray => Observable.forkJoin(zipStremArray));
-      };
+  };
 
   create(param: TicketModel) {
     return this._http
-      .post<{name: string }>(`${environment.firebase.baseUrl}/tickets.json`, param)
+      .post<{ name: string }>(`${environment.firebase.baseUrl}/tickets.json`, param)
       .map(fbPostReturn => fbPostReturn.name)
       .switchMap(ticketId => this._saveGeneratedId(ticketId))
       .switchMap(ticketId => this._eventService.addTicket(param.eventId, ticketId))
@@ -57,6 +59,24 @@ export class TicketService {
       {id: ticketId}
     )
       .map(x => x.id);
+  }
+
+  getOne(id: string): Observable<TicketModel> {
+    return this._http.get<TicketModel>(`${environment.firebase.baseUrl}/tickets/${id}.json`)
+      .flatMap(
+        ticket => Observable.combineLatest(
+          Observable.of(new TicketModel(ticket)),
+          this._eventService.getEventById(ticket.eventId),
+          this._userService.getUserById(ticket.sellerUserId),
+          (t: TicketModel, e: EventModel, u: UserModel) => {
+            return {
+              ...t,
+              event: e,
+              seller: u
+            };
+          }
+        )
+      );
   }
 
   // private _getMaxId() {

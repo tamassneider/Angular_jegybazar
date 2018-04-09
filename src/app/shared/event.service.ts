@@ -93,7 +93,7 @@ export class EventService {
     return this._http.get<EventModel[]>(`${environment.firebase.baseUrl}/events.json`)
     .map(data => Object.values(data));
   }
-  getEventById(id: number) {
+  getEventById(id: string) {
     return this._http.get<EventModel>(`${environment.firebase.baseUrl}/events/${id}.json`);
   }
 
