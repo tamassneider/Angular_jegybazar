@@ -1,5 +1,5 @@
 export class UserModel {
-  id: number;
+  id: string;
   name: string;
   email: string;
   address: string;
@@ -14,7 +14,7 @@ export class UserModel {
 
   static get exampleUser(): UserModel {
     return {
-      id: 0,
+      id: '',
       name: 'Legyek Réka Matilda',
       email: 'legyekrekamatilda@valami.com',
       address: 'Futrinka utca',
@@ -25,7 +25,7 @@ export class UserModel {
 
   static get emptyUser(): UserModel {
     return {
-      id: 0,
+      id: '',
       name: '',
       email: '',
       address: '',

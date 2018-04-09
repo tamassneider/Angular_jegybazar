@@ -2,75 +2,65 @@ import { Injectable } from '@angular/core';
 import {TicketModel} from './ticket-model';
 import {EventService} from './event.service';
 import {UserService} from './user.service';
+import {Observable} from 'rxjs/Observable';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment.prod';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/zip';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/switchMap';
+import {EventModel} from './event-model';
+import {UserModel} from './user-model';
+
 
 @Injectable()
 export class TicketService {
-  private _tickets: TicketModel[];
+  private _tickets: Observable<TicketModel[]>;
 
   constructor(private _eventService: EventService,
-              private _userService: UserService) {
-    this._tickets = [
-      new TicketModel({
-        'id': 1,
-        'date': '2019-05-02',
-        'numberOfTickets': 5,
-        'minimalBidPrice': 2000,
-        'bidStep': 500,
-        'eventId': 1,
-        'sellerUserId': 1
-      }),
-      new TicketModel({
-        'id': 2,
-        'date': '2019-10-12',
-        'numberOfTickets': 4,
-        'minimalBidPrice': 4000,
-        'bidStep': 1000,
-        'eventId': 1,
-        'sellerUserId': 2
-      }),
-      new TicketModel({
-        'id': 6,
-        'date': '2019-11-06',
-        'numberOfTickets': 1,
-        'minimalBidPrice': 15000,
-        'bidStep': 1500,
-        'eventId': 2,
-        'sellerUserId': 3
-      })
-    ];
+              private _userService: UserService,
+              private _http: HttpClient) {
   }
 
   getAllTickets() {
-    // return this._tickets.map(ticket => {
-    //   return {
-    //     ...ticket,
-    //     event: this._eventService.getEventById(ticket.eventId),
-    //     seller: this._userService.getUserById(ticket.sellerUserId)
-    //   };
-    // });
-  }
+    return this._http.get(`${environment.firebase.baseUrl}/tickets.json`)
+      .map(ticketObject => Object.values(ticketObject))
+      .map(ticketsArray => ticketsArray.map(tm =>
+      Observable.zip(
+        Observable.of(tm),
+        this._eventService.getEventById(tm.eventId),
+        this._userService.getUserById(tm.sellerUserId),
+        (t: TicketModel, e: EventModel, u: UserModel) => {
+          return {
+            ...t,
+            event: e,
+            seller: u
+          };
+        }
+      )))
+      .switchMap(zipStremArray => Observable.forkJoin(zipStremArray));
+      };
 
-  getEventNameById(id: number) {
-    // return this._eventService.getEventById(id).name;
-  }
-  getTicketById(id: number) {
-    const tic = this._tickets.filter( (x) => x.id === id);
-    return tic.length;
-  }
   create(param: TicketModel) {
-    // this._tickets = [
-    //   ...this._tickets,
-    //     new TicketModel ({
-    //       id: this._getMaxId(),
-    //       ...param,
-    //       event: this._eventService.getEventById(param.eventId),
-    //       seller: this._userService.getUserById(param.sellerUserId)
-    //     })
-    // ];
-    // console.log(this._tickets);
+    return this._http
+      .post<{name: string }>(`${environment.firebase.baseUrl}/tickets.json`, param)
+      .map(fbPostReturn => fbPostReturn.name)
+      .switchMap(ticketId => this._saveGeneratedId(ticketId))
+      .switchMap(ticketId => this._eventService.addTicket(param.eventId, ticketId))
+      .switchMap(ticketId => this._userService.addTicket(ticketId));
   }
 
-  private _getMaxId() {
-    return this._tickets.reduce((x, y) => x.id > y.id ? x : y).id + 1;
+  private _saveGeneratedId(ticketId: string): Observable<string> {
+    return this._http.patch<{ id: string }>(
+      `${environment.firebase.baseUrl}/tickets/${ticketId}.json`,
+      {id: ticketId}
+    )
+      .map(x => x.id);
   }
+
+  // private _getMaxId() {
+  //   return this._tickets.reduce((x, y) => x.id > y.id ? x : y).id + 1;
+  // }
+
 }

@@ -1,18 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {EventModel} from '../../shared/event-model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EventService} from '../../shared/event.service';
 import {Location} from '@angular/common';
 import {UserService} from '../../shared/user.service';
+import {Subject} from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil';
 
 @Component({
   selector: 'app-event-detail',
   templateUrl: './event-detail.component.html',
   styleUrls: ['./event-detail.component.css']
 })
-export class EventDetailComponent implements OnInit {
+export class EventDetailComponent implements OnInit, OnDestroy {
   event: EventModel;
-  editForm = false;
+  viewForm = true;
+
+  private _destroy$ = new Subject<void>();
 
   constructor(private _route: ActivatedRoute,
               private _eventService: EventService,
@@ -22,26 +26,43 @@ export class EventDetailComponent implements OnInit {
 
   ngOnInit() {
     const evId = this._route.snapshot.params['id'];
-    this.event = new EventModel(EventModel.emptyEvent);
+    this.event = new EventModel();
+    this.viewForm = !!evId;
      if (evId) {
-       console.log('megvan az id');
        this._eventService.getEventById(evId)
+         .takeUntil(this._destroy$)
          .subscribe(evm => this.event = evm);
-       this.editForm = true;
+       console.log('megvan az id: ', evId);
      }
+  }
 
+  ngOnDestroy() {
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   onSubmit(form) {
-    if (this.event.id) {
-      this._eventService.update(this.event);
-      console.log('update');
-    } else {
-      this._eventService.create(this.event);
-      console.log('create');
-    }
-    this._location.back();
+    this._eventService.save(this.event)
+      .takeUntil(this._destroy$)
+      .subscribe(
+        () => this.navigateBack(),
+        (err) => {
+          console.warn(`Problem with saving the form: ${err}`);
+        }
+      );
   }
+
+  delete() {
+    this._eventService.delete(this.event)
+      .takeUntil(this._destroy$)
+      .subscribe(
+        () => this.navigateBack(),
+        (err) => {
+          console.warn(`Problem with saving the form: ${err}`);
+        }
+      );
+  }
+
   navigateBack() {
     this._location.back();
   }

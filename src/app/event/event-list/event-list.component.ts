@@ -52,17 +52,6 @@ export class EventListComponent implements OnInit {
             return acc;
           }, []);
       });
-
-    // // [0,1,2,3,4,5,6,7,8] -- reduce --> [[0,1,2],[3,4,5],[6,7,8]]
-    // this.eventsGrouppedBy3 = this._eventService.getAllEvents()
-    //   .reduce((acc, curr: EventModel, ind: number) => {
-    //     if (ind % 3 === 0) {
-    //       acc.push([]);
-    //     }
-    //     acc[acc.length - 1].push(curr);
-    //     return acc;
-    //   }, []);
-    // console.log(this.eventsGrouppedBy3);
   }
 
 }

@@ -3,6 +3,7 @@ import {TicketService} from '../../shared/ticket.service';
 import {UserService} from '../../shared/user.service';
 import {TicketModel} from '../../shared/ticket-model';
 import {EventService} from '../../shared/event.service';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'app-tickets-table',
@@ -10,14 +11,14 @@ import {EventService} from '../../shared/event.service';
   styleUrls: ['./tickets-table.component.css']
 })
 export class TicketsTableComponent implements OnInit {
-  public tickets: TicketModel[];
+  public tickets: Observable<TicketModel[]>;
 
   constructor(private _ticketService: TicketService,
               public userService: UserService,
               private _eventService: EventService) { }
 
   ngOnInit() {
-  //  this.tickets = this._ticketService.getAllTickets();
+    this.tickets = this._ticketService.getAllTickets();
     console.log(this.tickets);
   }
 
