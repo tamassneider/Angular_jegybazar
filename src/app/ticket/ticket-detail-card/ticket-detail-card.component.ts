@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {TicketModel} from '../../shared/ticket-model';
 
 @Component({
@@ -6,12 +6,7 @@ import {TicketModel} from '../../shared/ticket-model';
   templateUrl: './ticket-detail-card.component.html',
   styleUrls: ['./ticket-detail-card.component.css']
 })
-export class TicketDetailCardComponent implements OnInit {
+export class TicketDetailCardComponent  {
   @Input() ticket: TicketModel;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 
 }

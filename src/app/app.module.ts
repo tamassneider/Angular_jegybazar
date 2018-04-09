@@ -29,6 +29,7 @@ import {LoggedInGuard} from './shared/logged-in.guard';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { TicketDetailCardComponent } from './ticket/ticket-detail-card/ticket-detail-card.component';
+import { LicitCardComponent } from './ticket/licit-card/licit-card.component';
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { TicketDetailCardComponent } from './ticket/ticket-detail-card/ticket-de
     TicketDetailComponent,
     EventCardComponent,
     TicketDetailCardComponent,
+    LicitCardComponent,
   ],
   imports: [
     BrowserModule,
