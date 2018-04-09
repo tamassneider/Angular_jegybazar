@@ -32,6 +32,7 @@ import { TicketDetailCardComponent } from './ticket/ticket-detail-card/ticket-de
 import { LicitCardComponent } from './ticket/licit-card/licit-card.component';
 import {MomentModule} from 'angular2-moment';
 import 'moment/locale/hu';
+import { BidFormComponent } from './ticket/bid-form/bid-form.component';
 
 
 @NgModule({
@@ -58,6 +59,7 @@ import 'moment/locale/hu';
     EventCardComponent,
     TicketDetailCardComponent,
     LicitCardComponent,
+    BidFormComponent,
   ],
   imports: [
     BrowserModule,

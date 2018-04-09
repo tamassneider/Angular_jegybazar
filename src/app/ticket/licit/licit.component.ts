@@ -20,8 +20,4 @@ export class LicitComponent implements OnInit {
     console.log(this.ticket)
   }
 
-  onBidWithBidStep() {
-    alert('Megnyomtak a gombot');
-  }
-
 }
