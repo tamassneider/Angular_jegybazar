@@ -8,6 +8,7 @@ import {EventModel} from '../../shared/event-model';
 })
 export class EventCardComponent implements OnInit {
   @Input () esemeny: EventModel
+  @Input () nextLabel = 'Tovább';
   constructor() { }
 
   ngOnInit() {
