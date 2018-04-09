@@ -30,6 +30,7 @@ import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { TicketDetailCardComponent } from './ticket/ticket-detail-card/ticket-detail-card.component';
 import { LicitCardComponent } from './ticket/licit-card/licit-card.component';
+import {MomentModule} from 'angular2-moment';
 
 
 @NgModule({
@@ -63,7 +64,8 @@ import { LicitCardComponent } from './ticket/licit-card/licit-card.component';
     CollapseModule.forRoot(),
     AlertModule.forRoot(),
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    MomentModule
   ],
   providers: [EventService, UserService, TicketService, LoggedInGuard],
   bootstrap: [AppComponent]
