@@ -42,7 +42,7 @@ export class TicketService {
           }
         )))
       .switchMap(zipStremArray => Observable.forkJoin(zipStremArray));
-  };
+  }
 
   create(param: TicketModel) {
     return this._http

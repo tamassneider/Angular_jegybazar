@@ -3,7 +3,6 @@ import {UserModel} from './user-model';
 
 export class TicketModel {
   id?: string;
-  date: string;
   numberOfTickets: number;
   minimalBidPrice: number;
   bidStep: number;
@@ -11,6 +10,10 @@ export class TicketModel {
   event?: EventModel;
   sellerUserId: string;
   seller?: UserModel;
+  currentBid: number;
+  bidCounter: number;
+  bidEndDate: number;
+  details: string;
 
   constructor(param?: TicketModel) {
       Object.assign(this, param);
@@ -18,12 +21,15 @@ export class TicketModel {
 
   static get emptyTicket(): TicketModel {
     return {
-    date: '',
     numberOfTickets: 0,
     minimalBidPrice: 0,
     bidStep: 0,
     eventId: '',
-    sellerUserId: ''
+    sellerUserId: '',
+    currentBid: 0,
+    bidCounter: 0,
+    bidEndDate: 0,
+    details: '',
   };
   }
 }

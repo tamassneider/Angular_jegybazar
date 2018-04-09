@@ -13,10 +13,11 @@ export class LicitComponent implements OnInit {
   constructor( private _ticketService: TicketService) { }
 
   ngOnInit() {
-    const id = '-L9QY6vA9XNd8Zb3TCuI';
+    const id = '-Ky0HolLJBH3Q5uVHWZf';
     this._ticketService.getOne(id).subscribe(
       ticket => this.ticket = ticket
     );
+    console.log(this.ticket)
   }
 
   onBidWithBidStep() {
