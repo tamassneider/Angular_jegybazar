@@ -5,6 +5,7 @@ export class UserModel {
   address: string;
   dateOfBirth: string;
   gender: string;
+  profilePictureUrl: string;
 
   constructor (param?: UserModel) {
     if (param) {
@@ -20,6 +21,7 @@ export class UserModel {
       address: 'Futrinka utca',
       dateOfBirth: '2001.01.01',
       gender: 'male',
+      profilePictureUrl: '',
     };
   }
 
@@ -31,6 +33,7 @@ export class UserModel {
       address: '',
       dateOfBirth: '',
       gender: '',
+      profilePictureUrl: '',
     };
   }
 
