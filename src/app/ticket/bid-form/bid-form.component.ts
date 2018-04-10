@@ -11,7 +11,7 @@ import {BidService} from '../../shared/bid.service';
 })
 export class BidFormComponent implements OnInit{
   @Input() ticket: TicketModel;
-  @Output() bidWithBidStep = new EventEmitter<void>();
+  @Output() bid = new EventEmitter<void>();
   displayBidStep = true;
   form: FormGroup;
   submitted = false;
@@ -26,14 +26,26 @@ export class BidFormComponent implements OnInit{
       {
         bid: [null, Validators.compose(
           [Validators.required,
-            bidMinimumValidator(this.ticket.currentBid + this.ticket.bidStep)])
+              bidMinimumValidator(() => {return this.ticket; } )
+            ]
+          )
         ]
       }
     );
   }
 
   onBidWithBidStep() {
-    this.bidWithBidStep.emit();
+    this.toBid(this.ticket.currentBid + this.ticket.bidStep)
+      .subscribe(
+        () => {
+          this.submitSuccessAlert = true;
+          this.bid.emit();
+        },
+        err => {
+          this.submitErrorAlert = true;
+          console.warn(err);
+        }
+      );
   }
 
   displayBidWithStep($event: Event) {
@@ -47,12 +59,13 @@ export class BidFormComponent implements OnInit{
     this.submitSuccessAlert = false;
     this.submitErrorAlert = false;
     if (this.form.valid) {
-      this._bidService.bid(this.ticket.id, this.form.value['bid'])
+      this.toBid(this.form.value['bid'])
         .subscribe(
           () => {
             this.submitted = false;
             this.form.reset({bid: null});
             this.submitSuccessAlert = true;
+            this.bid.emit();
           },
           err => {
             this.submitErrorAlert = true;
@@ -61,6 +74,10 @@ export class BidFormComponent implements OnInit{
         );
       console.log(this.submitted);
     }
+  }
+
+  toBid(value: number) {
+    return this._bidService.bid(this.ticket.id, value);
   }
 
 }

@@ -21,28 +21,36 @@ export class LicitComponent implements OnInit {
   }
 
   ngOnInit() {
-    const handle404 = () => {
-      this._router.navigate(['404']);
-    };
-
     this._route.paramMap.subscribe(
       (params: ParamMap) => {
-        this._ticketService.getOne(params.get('id')).subscribe(
-          ticket => {
-            if (ticket === null) {
-              handle404();
-            } else {
-              this.ticket = ticket;
-            }
-          },
-          err => {
-            return handle404();
-          }
-        );
+        this.refreshTicket(params.get('id'));
       }
     );
 
     console.log(this.ticket);
+  }
+
+  onRefreshTicket() {
+    this.refreshTicket(this.ticket.id);
+  }
+
+  private refreshTicket (id: string) {
+    const handle404 = () => {
+      this._router.navigate(['404']);
+    };
+
+    this._ticketService.getOne(id).subscribe(
+      ticket => {
+        if (ticket === null) {
+          handle404();
+        } else {
+          this.ticket = ticket;
+        }
+      },
+      err => {
+        return handle404();
+      }
+    );
   }
 
 }
