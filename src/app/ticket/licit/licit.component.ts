@@ -17,7 +17,7 @@ export class LicitComponent implements OnInit {
                userService: UserService,
                private _route: ActivatedRoute,
                private _router: Router) {
-    this.isLoggedIn = userService.isLoggedin;
+    this.isLoggedIn = true;
   }
 
   ngOnInit() {
