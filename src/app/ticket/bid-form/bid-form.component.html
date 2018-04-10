@@ -17,6 +17,12 @@
                type="number"
                class="form-control"
                placeholder="Licitérték">
+        <div class="invalid-feedback" *ngIf="form.get('bid').hasError('required')">
+          Töltsd ki!!
+        </div>
+        <div class="invalid-feedback" *ngIf="form.get('bid').hasError('validateMinimumBid')">
+          Nem elég!! Legalább {{ticket.currentBid + ticket.bidStep}} Ft kell!
+        </div>
       </div>
       <div class="col-6">
         <button type="submit" class="btn btn-primary text-light" role="button">Licitálok</button>
