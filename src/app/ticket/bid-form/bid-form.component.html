@@ -9,6 +9,11 @@
   </div>
 </div>
 <ng-template #bidWithValue>
+
+  <alert *ngIf="submitSuccessAlert" type="success" dismissOnTimeout="5000"> Licit rögzítve</alert>
+
+  <alert *ngIf="submitErrorAlert" type="danger" >Szerverhiba!!!!!!!!!</alert>
+
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="row">
       <div class="col-6">
