@@ -33,6 +33,7 @@ import { LicitCardComponent } from './ticket/licit-card/licit-card.component';
 import {MomentModule} from 'angular2-moment';
 import 'moment/locale/hu';
 import { BidFormComponent } from './ticket/bid-form/bid-form.component';
+import { LoadingSpinnerComponent } from './core/loading-spinner/loading-spinner.component';
 
 
 @NgModule({
@@ -60,6 +61,7 @@ import { BidFormComponent } from './ticket/bid-form/bid-form.component';
     TicketDetailCardComponent,
     LicitCardComponent,
     BidFormComponent,
+    LoadingSpinnerComponent,
   ],
   imports: [
     BrowserModule,
