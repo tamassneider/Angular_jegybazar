@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {TicketModel} from '../../shared/ticket-model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {bidMinimumValidator} from './bid.validator';
@@ -9,7 +9,7 @@ import {BidService} from '../../shared/bid.service';
   templateUrl: './bid-form.component.html',
   styleUrls: ['./bid-form.component.css']
 })
-export class BidFormComponent implements OnInit{
+export class BidFormComponent implements OnInit, OnChanges{
   @Input() ticket: TicketModel;
   @Output() bid = new EventEmitter<void>();
   displayBidStep = true;
@@ -17,9 +17,20 @@ export class BidFormComponent implements OnInit{
   submitted = false;
   submitSuccessAlert = false;
   submitErrorAlert = false;
+  disabled = false;
 
   constructor( private _fb: FormBuilder,
                private _bidService: BidService) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['ticket'] != null
+    && !changes['ticket'].isFirstChange()
+    && changes['ticket'].currentValue != null) {
+      this.disabled= false;
+      this.form.reset ({bid: null});
+      this.form.get('bid').enable();
+    }
+  }
 
   ngOnInit() {
     this.form = this._fb.group(
@@ -56,14 +67,11 @@ export class BidFormComponent implements OnInit{
 
   onSubmit() {
     this.submitted = true;
-    this.submitSuccessAlert = false;
-    this.submitErrorAlert = false;
     if (this.form.valid) {
       this.toBid(this.form.value['bid'])
         .subscribe(
           () => {
             this.submitted = false;
-            this.form.reset({bid: null});
             this.submitSuccessAlert = true;
             this.bid.emit();
           },
@@ -77,6 +85,10 @@ export class BidFormComponent implements OnInit{
   }
 
   toBid(value: number) {
+    this.submitSuccessAlert = false;
+    this.submitErrorAlert = false;
+    this.form.get('bid').disable();
+    this.disabled = true;
     return this._bidService.bid(this.ticket.id, value);
   }
 
