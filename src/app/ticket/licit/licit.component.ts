@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {TicketService} from '../../shared/ticket.service';
 import {TicketModel} from '../../shared/ticket-model';
 import {UserService} from '../../shared/user.service';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 
 @Component({
   selector: 'app-licit',
@@ -13,15 +14,20 @@ export class LicitComponent implements OnInit {
   isLoggedIn: boolean;
 
   constructor( private _ticketService: TicketService,
-               userService: UserService) {
+               userService: UserService,
+               private _route: ActivatedRoute) {
     this.isLoggedIn = userService.isLoggedin;
   }
 
   ngOnInit() {
-    const id = '-Ky0HolLJBH3Q5uVHWZf';
-    this._ticketService.getOne(id).subscribe(
-      ticket => this.ticket = ticket
+    this._route.paramMap.subscribe(
+      (params: ParamMap) => {
+        this._ticketService.getOne(params.get('id')).subscribe(
+          ticket => this.ticket = ticket
+        );
+      }
     );
+
     console.log(this.ticket);
   }
 
