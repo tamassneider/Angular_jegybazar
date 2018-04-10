@@ -79,6 +79,11 @@ export class TicketService {
       );
   }
 
+  modify(ticket: TicketModel) {
+    return this._http
+      .put(`${environment.firebase.baseUrl}/tickets/${ticket.id}.json`, ticket);
+  }
+
   // private _getMaxId() {
   //   return this._tickets.reduce((x, y) => x.id > y.id ? x : y).id + 1;
   // }

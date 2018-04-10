@@ -27,13 +27,14 @@ import {AlertModule} from 'ngx-bootstrap';
 import {TicketService} from './shared/ticket.service';
 import {LoggedInGuard} from './shared/logged-in.guard';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { TicketDetailCardComponent } from './ticket/ticket-detail-card/ticket-detail-card.component';
 import { LicitCardComponent } from './ticket/licit-card/licit-card.component';
 import {MomentModule} from 'angular2-moment';
 import 'moment/locale/hu';
 import { BidFormComponent } from './ticket/bid-form/bid-form.component';
 import { LoadingSpinnerComponent } from './core/loading-spinner/loading-spinner.component';
+import {BidService} from './shared/bid.service';
 
 
 @NgModule({
@@ -73,7 +74,12 @@ import { LoadingSpinnerComponent } from './core/loading-spinner/loading-spinner.
     HttpClientModule,
     MomentModule
   ],
-  providers: [EventService, UserService, TicketService, LoggedInGuard],
+  providers: [EventService,
+    UserService,
+    TicketService,
+    LoggedInGuard,
+    BidService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
