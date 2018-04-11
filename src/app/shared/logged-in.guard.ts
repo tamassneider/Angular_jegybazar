@@ -11,14 +11,19 @@ export class LoggedInGuard implements CanActivate {
               private _location: Location) {
 
   }
+
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if (this._userService.isLoggedin) {
-      return true;
-    } else {
-      this._router.navigate([this._location.path()])
-      return false;
-    }
+    return this._userService.isLoggedIn$.map(
+      isLoggedIn => {
+        if (isLoggedIn === false) {
+          this._router.navigate(['/home']);
+          return false;
+        }
+        return true;
+      }
+    );
+
   }
 }
