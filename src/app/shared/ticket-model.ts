@@ -1,5 +1,6 @@
 import {EventModel} from './event-model';
 import {UserModel} from './user-model';
+import getOwnPropertyDescriptor = Reflect.getOwnPropertyDescriptor;
 
 export class TicketModel {
   id?: string;
@@ -19,17 +20,21 @@ export class TicketModel {
       Object.assign(this, param);
   }
 
-  static get emptyTicket(): TicketModel {
-    return {
-    numberOfTickets: 0,
-    minimalBidPrice: 0,
-    bidStep: 0,
-    eventId: '',
-    sellerUserId: '',
-    currentBid: 0,
-    bidCounter: 0,
-    bidEndDate: 0,
-    details: '',
-  };
+  setEvent (event: EventModel){
+    delete this.event;
+    this.event = event;
+    const eventPropertyDescriptor = Object.getOwnPropertyDescriptor(this, 'event');
+    eventPropertyDescriptor.enumerable = false;
+    Object.defineProperty(this, 'event', eventPropertyDescriptor);
+    return this;
+  }
+
+  setSeller (seller: UserModel){
+    delete this.seller;
+    this.seller = seller;
+    const sellerPropertyDescriptor = Object.getOwnPropertyDescriptor(this, 'seller');
+    sellerPropertyDescriptor.enumerable = false;
+    Object.defineProperty(this, 'seller', sellerPropertyDescriptor);
+    return this;
   }
 }
