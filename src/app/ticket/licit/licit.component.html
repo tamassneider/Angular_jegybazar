@@ -1,7 +1,6 @@
-<ng-container *ngIf="ticket != null; else loading">
+<ng-container *ngIf="(ticket$ | async) as ticket; else loading">
   <div class="container">
     <div class="row">
-      <ng-container *ngIf="ticket">
         <div class="col-sm order-md-2">
 
           <app-event-card [esemeny]="ticket.event" nextLabel="Esemény megtekintése"></app-event-card>
@@ -13,12 +12,10 @@
           <app-ticket-detail-card [ticket]="ticket" [loading]="progressRefreshTicket"></app-ticket-detail-card>
           <app-licit-card [isLoggedIn]="isLoggedIn$ | async"
                           [ticket]="ticket"
-                          (refreshTicket)="onRefreshTicket()"
                           [loading]="progressRefreshTicket"
           ></app-licit-card>
 
         </div>
-      </ng-container>
     </div>
   </div>
 </ng-container>

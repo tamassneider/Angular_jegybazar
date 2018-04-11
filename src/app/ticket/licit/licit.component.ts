@@ -4,6 +4,7 @@ import {TicketModel} from '../../shared/ticket-model';
 import {UserService} from '../../shared/user.service';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/share';
 
 @Component({
   selector: 'app-licit',
@@ -11,7 +12,7 @@ import {Observable} from 'rxjs/Observable';
   styleUrls: ['./licit.component.css']
 })
 export class LicitComponent implements OnInit {
-  ticket: TicketModel;
+  ticket$: Observable<TicketModel>;
   isLoggedIn$: Observable<boolean>;
   progressRefreshTicket = false;
 
@@ -28,12 +29,6 @@ export class LicitComponent implements OnInit {
         this.refreshTicket(params.get('id'));
       }
     );
-
-    console.log(this.ticket);
-  }
-
-  onRefreshTicket() {
-    this.refreshTicket(this.ticket.id);
   }
 
   private refreshTicket (id: string) {
@@ -42,13 +37,12 @@ export class LicitComponent implements OnInit {
       this._router.navigate(['404']);
     };
 
-    this._ticketService.getOne(id).subscribe(
+    this.ticket$ = this._ticketService.getOne(id).share();
+    this.ticket$.subscribe(
       ticket => {
         this.progressRefreshTicket = false;
         if (ticket === null) {
           handle404();
-        } else {
-          this.ticket = ticket;
         }
       },
       err => {
