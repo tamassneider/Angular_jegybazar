@@ -10,16 +10,27 @@ import {UserModel} from './user-model';
   import 'rxjs/add/operator/map';
   import 'rxjs/add/operator/switchMap';
   import {FirebaseRegistrationModel} from '../firebase-registration-model';
+  import {ReplaySubject} from 'rxjs/ReplaySubject';
+  import * as firebase from 'firebase';
 
 @Injectable()
 export class UserService {
-  isLoggedin = false;
+  isLoggedin = new ReplaySubject(1);
 
   private _user: UserModel;
   private _fbAuthData: FirebaseLoginModel | FirebaseRegistrationModel | undefined;
 
   constructor(private _router: Router,
               private _http: HttpClient) {
+    firebase.auth().onAuthStateChanged(
+      user => {
+        if (user != null) {
+          this.isLoggedin.next(true);
+        } else {
+          this.isLoggedin.next(false);
+        }
+      }
+    )
   }
 
   get fbIdToken(): string | null {
@@ -36,7 +47,6 @@ export class UserService {
       })
       .do((fbAuthResponse: FirebaseLoginModel) => this._fbAuthData = fbAuthResponse)
       .switchMap(fbLogin => this._http.get<UserModel>(`${environment.firebase.baseUrl}/users/${fbLogin.localId}.json`))
-      .do(user => this.isLoggedin = true)
       .do(user => this._user = user)
       .do(user => console.log('succesful login with user ', user));
   }
@@ -58,7 +68,6 @@ export class UserService {
         };
       })
       .switchMap(user => this.save(user))
-      .do (user => this.isLoggedin = true)
       .do (user => console.log('succesful registration with user ', user));
   }
 
@@ -70,7 +79,6 @@ export class UserService {
 
   logout() {
     this._user = new UserModel()
-    this.isLoggedin = false;
     delete(this._fbAuthData);
     this._router.navigate(['/home']);
     console.log('signed out');
