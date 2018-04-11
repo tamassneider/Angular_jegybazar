@@ -15,6 +15,7 @@ import {UserModel} from './user-model';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/combineLatest';
 import * as firebase from 'firebase';
+import 'rxjs/add/operator/first';
 
 
 @Injectable()
@@ -60,6 +61,10 @@ export class TicketService {
       {id: ticketId}
     )
       .map(x => x.id);
+  }
+
+  getOneOnce(id: string): Observable<TicketModel> {
+    return this.getOne(id).first();
   }
 
   getOne(id: string): Observable<TicketModel> {
