@@ -11,7 +11,7 @@
         <div class="col-sm-12 col-md-8">
 
           <app-ticket-detail-card [ticket]="ticket" [loading]="progressRefreshTicket"></app-ticket-detail-card>
-          <app-licit-card [isLoggedIn]="isLoggedIn"
+          <app-licit-card [isLoggedIn]="isLoggedIn$ | async"
                           [ticket]="ticket"
                           (refreshTicket)="onRefreshTicket()"
                           [loading]="progressRefreshTicket"

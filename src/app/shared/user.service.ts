@@ -12,25 +12,30 @@ import {UserModel} from './user-model';
   import {FirebaseRegistrationModel} from '../firebase-registration-model';
   import {ReplaySubject} from 'rxjs/ReplaySubject';
   import * as firebase from 'firebase';
+  import 'rxjs/add/observable/fromPromise';
 
 @Injectable()
 export class UserService {
-  isLoggedIn$ = new ReplaySubject(1);
+  isLoggedIn$ = new ReplaySubject<boolean>(1);
 
-  private _user: UserModel;
-  private _fbAuthData: FirebaseLoginModel | FirebaseRegistrationModel | undefined;
+  private _user = new ReplaySubject<UserModel>(1);
+  private _fbAuthData: any;
 
   constructor(private _router: Router,
               private _http: HttpClient) {
     firebase.auth().onAuthStateChanged(
       user => {
         if (user != null) {
+          this._fbAuthData = user;
+          this.getUserById(user.uid).subscribe(remoteUser => this._user.next(remoteUser));
           this.isLoggedIn$.next(true);
         } else {
+          this._fbAuthData = null;
+          this._user.next(null);
           this.isLoggedIn$.next(false);
         }
       }
-    )
+    );
   }
 
   get fbIdToken(): string | null {
@@ -38,17 +43,8 @@ export class UserService {
   }
 
   login(email: string, password: string): Observable<UserModel | void> {
-    return this._http.post<FirebaseLoginModel>(
-      `${environment.firebase.loginUrl}?key=${environment.firebase.apiKey}`,
-      {
-        'email': email,
-        'password': password,
-        'returnSecureToken': true
-      })
-      .do((fbAuthResponse: FirebaseLoginModel) => this._fbAuthData = fbAuthResponse)
-      .switchMap(fbLogin => this._http.get<UserModel>(`${environment.firebase.baseUrl}/users/${fbLogin.localId}.json`))
-      .do(user => this._user = user)
-      .do(user => console.log('succesful login with user ', user));
+    return Observable.fromPromise(firebase.auth()
+      .signInWithEmailAndPassword(email, password));
   }
 
   register(param: UserModel, password: string) {
@@ -73,24 +69,20 @@ export class UserService {
 
   save(param: UserModel) {
     return this._http.put<UserModel>(
-      `${environment.firebase.baseUrl}/users/${param.id}.json`, param)
-      .do(user => this._user = user);
+      `${environment.firebase.baseUrl}/users/${param.id}.json`, param);
   }
 
   logout() {
-    this._user = new UserModel()
-    delete(this._fbAuthData);
+    firebase.auth().signOut();
     this._router.navigate(['/home']);
-    console.log('signed out');
   }
 
   getUserById(fbid: string) {
     return this._http.get<UserModel>(`${environment.firebase.baseUrl}/users/${fbid}.json`);
   }
 
-
   getCurrentUser() {
-   return this._user;
+   return this._user.asObservable();
   }
 
   getAllUsers() {
@@ -99,11 +91,17 @@ export class UserService {
   }
 
   addTicket(ticketId: string): Observable<string> {
-    return this._http.patch(
-      `${environment.firebase.baseUrl}/users/${this._user.id}/tickets.json`,
-      {[ticketId]: true}
-    )
-      .map(rel => Object.keys(rel)[0]);
+    return this._user.flatMap(
+      user => {
+        return this._http.patch(
+          `${environment.firebase.baseUrl}/users/${user.id}/tickets.json`,
+          {[ticketId]: true}
+        )
+          .map(rel => Object.keys(rel)[0]);
+      }
+    );
+
+
   }
 
 }

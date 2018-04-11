@@ -3,13 +3,14 @@ import {UserModel} from '../../shared/user-model';
 import {UserService} from '../../shared/user.service';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs/Subject';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'app-profile-edit',
   templateUrl: './profile-edit.component.html',
   styleUrls: ['./profile-edit.component.css']
 })
-export class ProfileEditComponent implements OnInit {
+export class ProfileEditComponent implements OnInit, OnDestroy {
   user: UserModel;
 
   private _destroy$ = new Subject();
@@ -18,7 +19,9 @@ export class ProfileEditComponent implements OnInit {
               private _router: Router) { }
 
   ngOnInit() {
-    this.user = this._userService.getCurrentUser();
+    this._userService.getCurrentUser().subscribe(
+      user => this.user = user
+    );
   }
 
   ngOnDestroy () {
