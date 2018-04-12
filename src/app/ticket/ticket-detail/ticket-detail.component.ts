@@ -13,7 +13,7 @@ import {Subscription} from 'rxjs/Subscription';
   templateUrl: './ticket-detail.component.html',
   styleUrls: ['./ticket-detail.component.css']
 })
-export class TicketDetailComponent implements OnInit {
+export class TicketDetailComponent implements OnInit, OnDestroy {
   ticket: TicketModel;
   events: Observable<EventModel[]>;
 
@@ -25,7 +25,7 @@ export class TicketDetailComponent implements OnInit {
               private _eventService: EventService) { }
 
   ngOnInit() {
-    this.ticket = new TicketModel(TicketModel.emptyTicket);
+    this.ticket = new TicketModel;
     this.ticket.eventId = '';
     this._userService.getCurrentUser()
       .subscribe( user => this.ticket.sellerUserId = user.id);
