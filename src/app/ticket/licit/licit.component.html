@@ -12,7 +12,7 @@
           <app-ticket-detail-card [ticket]="ticket" [loading]="progressRefreshTicket"></app-ticket-detail-card>
           <app-licit-card [isLoggedIn]="isLoggedIn$ | async"
                           [ticket]="ticket"
-                          [loading]="progressRefreshTicket"
+                          (bid)="onBid()"
           ></app-licit-card>
 
         </div>

@@ -57,4 +57,8 @@ export class LicitComponent implements OnInit, OnDestroy {
     );
   }
 
+  onBid() {
+    this.progressRefreshTicket = true;
+  }
+
 }
