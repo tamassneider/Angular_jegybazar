@@ -36,10 +36,15 @@ export class TicketService {
           this._eventService.getEventById(tm.eventId),
           this._userService.getUserById(tm.sellerUserId),
           (t: TicketModel, e: EventModel, u: UserModel) => {
-            return t.setEvent(e).setSeller(u);
+            return {
+              ...t,
+              event: e,
+              seller: u
+            };
           }
         )))
-      .switchMap(zipStremArray => Observable.forkJoin(zipStremArray));
+      .switchMap(zipStremArray => Observable.forkJoin(zipStremArray))
+      .map(tickets => Object.values(tickets));
   }
 
   create(param: TicketModel) {
