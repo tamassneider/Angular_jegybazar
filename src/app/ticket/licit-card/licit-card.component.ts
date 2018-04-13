@@ -1,10 +1,11 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {TicketModel} from '../../shared/ticket-model';
 
 @Component({
   selector: 'app-licit-card',
   templateUrl: './licit-card.component.html',
-  styleUrls: ['./licit-card.component.css']
+  styleUrls: ['./licit-card.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LicitCardComponent implements OnChanges  {
   @Input() ticket: TicketModel;
@@ -21,7 +22,7 @@ export class LicitCardComponent implements OnChanges  {
   }
 
   onBidWithBidStep() {
-    this.loading = true
+    this.loading = true;
     this.bid.emit();
   }
 
