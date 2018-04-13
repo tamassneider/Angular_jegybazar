@@ -13,11 +13,11 @@ export class JumbotronComponent implements OnInit, DoCheck, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    console.log('Jumbo ngAfterViewChecked1');
+    // console.log('Jumbo ngAfterViewChecked1');
   }
 
   ngDoCheck(): void {
-    console.log('Jumbo ngDoCheck');
+    // console.log('Jumbo ngDoCheck');
   }
 
 }

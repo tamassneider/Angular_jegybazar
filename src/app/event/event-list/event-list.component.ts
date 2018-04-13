@@ -1,8 +1,14 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {EventService} from '../../shared/event.service';
 import {EventModel} from '../../shared/event-model';
 import {UserService} from '../../shared/user.service';
 import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/operator/delay';
+import 'rxjs/add/operator/distinctUntilChanged';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {text} from '@angular/core/src/render3/instructions';
+import {map} from 'rxjs/operator/map';
 
 @Component({
   selector: 'app-event-list',
@@ -10,11 +16,14 @@ import {Observable} from 'rxjs/Observable';
   styleUrls: ['./event-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EventListComponent implements OnInit {
-  public eventsGrouppedBy3: EventModel[];
-  public events$: Observable<EventModel[]>
-  public events: EventModel[];
+export class EventListComponent implements OnInit, AfterViewInit {
+  @ViewChild('searchInput') searchInput: ElementRef;
+  // public eventsGrouppedBy3: EventModel[];
+  // public events$: Observable<EventModel[]>
+  // public events: EventModel[];
   public eventsGrouppedBy3$: Observable<EventModel[]>;
+  private filteredText$ = new BehaviorSubject<string>(null);
+
 
   constructor(private _eventService: EventService,
               public userService: UserService) {
@@ -44,15 +53,53 @@ export class EventListComponent implements OnInit {
     // grouping by 3 using async:
 
     this.eventsGrouppedBy3$ = this._eventService.getAllEvents()
+      .flatMap(
+         events => {
+          return this.filteredText$.map(
+            filterText => {
+              if (filterText === null) {
+                return events;
+              } else {
+                return events.filter(
+                  event => {
+                    return event.name.toLowerCase().indexOf(filterText.toLocaleLowerCase()) > -1;
+                  }
+                );
+              }
+            }
+          );
+       }
+      )
       .map(data => {
         return data.reduce((acc, curr: EventModel, ind: number) => {
-            if (ind % 3 === 0) {
-              acc.push([]);
-            }
-            acc[acc.length - 1].push(curr);
-            return acc;
-          }, []);
+          if (ind % 3 === 0) {
+            acc.push([]);
+          }
+          acc[acc.length - 1].push(curr);
+          return acc;
+        }, []);
       });
+  }
+
+  ngAfterViewInit(): void {
+    console.log(this.searchInput);
+    Observable.fromEvent(this.searchInput.nativeElement, 'keyup')
+      .delay(300)
+      .map(
+        (event: Event) => {
+          return (event.srcElement as HTMLInputElement).value;
+        }
+      )
+      .distinctUntilChanged()
+      .subscribe(
+        inputText => {
+          if (inputText.length === 0) {
+            inputText = null;
+          }
+          this.filteredText$.next(inputText);
+        }
+
+      );
   }
 
 }
