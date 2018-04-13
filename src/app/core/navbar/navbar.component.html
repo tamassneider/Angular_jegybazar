@@ -6,12 +6,12 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup" [collapse]="isCollapsed">
       <div class="navbar-nav ml-auto">
-        <a class="nav-item nav-link" routerLinkActive="active" routerLink="/home">Home</a>
-        <a class="nav-item nav-link" routerLinkActive="active" routerLink="/event/list">Események</a>
-        <a class="nav-item nav-link" routerLinkActive="active" routerLink="/ticket/table">Jegyek</a>
-        <a class="nav-item nav-link" routerLinkActive="active" routerLink="/about">Rólunk</a>
-        <ng-container *ngIf="!(userService.isLoggedIn$ | async); else loggedInBlock">
-          <a class="nav-item nav-link" routerLinkActive="active" routerLink="/user/login">Belépés</a>
+        <app-navbar-item url="home" name="Home"></app-navbar-item>
+        <app-navbar-item url="event/list" name="Események"></app-navbar-item>
+        <app-navbar-item url="ticket/table" name="Jegyek"></app-navbar-item>
+        <app-navbar-item url="about" name="Rólunk"></app-navbar-item>
+        <ng-container *ngIf="!isLoggedIn; else loggedInBlock">
+          <app-navbar-item url="/user/login" name="Balépés"></app-navbar-item>
           <a class="nav-item nav-link btn btn-primary text-light ml-lg-2 btn-sm" routerLink="/user/register" >Regisztráció</a>
         </ng-container>
         <ng-template #loggedInBlock>

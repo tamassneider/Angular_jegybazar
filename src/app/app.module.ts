@@ -37,6 +37,7 @@ import { LoadingSpinnerComponent } from './core/loading-spinner/loading-spinner.
 import {BidService} from './shared/bid.service';
 import * as firebase from 'firebase';
 import {environment} from '../environments/environment';
+import { NavbarItemComponent } from './core/navbar-item/navbar-item.component';
 
 
 @NgModule({
@@ -65,6 +66,7 @@ import {environment} from '../environments/environment';
     LicitCardComponent,
     BidFormComponent,
     LoadingSpinnerComponent,
+    NavbarItemComponent,
   ],
   imports: [
     BrowserModule,
