@@ -17,14 +17,7 @@ import {LoggedInGuard} from './shared/logged-in.guard';
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
-  {
-    path: 'event', component: EventComponent,
-    children: [
-      {path: 'list', component: EventListComponent},
-      {path: 'new', component: EventDetailComponent},
-      {path: ':id', component: EventDetailComponent},
-    ],
-  },
+  {path: '', loadChildren: 'app/event/event.module#EventModule'},
   {
     path: 'ticket', component: TicketComponent,
     children: [

@@ -7,8 +7,6 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/distinctUntilChanged';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {text} from '@angular/core/src/render3/instructions';
-import {map} from 'rxjs/operator/map';
 
 @Component({
   selector: 'app-event-list',
