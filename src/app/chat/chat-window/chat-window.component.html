@@ -1,4 +1,4 @@
-<di class="card">
+<div class="card">
   <div class="card-header">
     Chat
   </div>
@@ -11,12 +11,35 @@
         <div class="clearfix chat-message">
           <div class="chat-message-header">
             <strong>XV user</strong>
-            small.float-right <text-muted> ekkor küldve</text-muted>
+            <small class="float-right text-muted"> ekkor küldve</small>
+            <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam dapibus interdum quam eu vulputate. Vestibulum pharetra scelerisque massa, et porta est pellentesque a. Pellentesque commodo hendrerit ante quis lobortis. Ut non magna elementum, interdum dui vitae, tincidunt dui. Integer at condimentum nisl. Curabitur fringilla mauris id justo pharetra tempor. Ut vulputate dapibus vehicula. Fusce volutpat gravida viverra. Ut tempor viverra leo, sed facilisis ante facilisis ac. Curabitur consectetur commodo convallis. Donec semper cursus suscipit.</p>
+          </div>
+        </div>
+      </li>
+      <li class="left clearfix">
+        <span class="float-left">
+          <img src="assets/user.svg" alt="Felhasználó képe" class="user-image rounded-circle">
+        </span>
+        <div class="clearfix chat-message">
+          <div class="chat-message-header">
+            <strong>XV user</strong>
+            <small class="float-right text-muted"> ekkor küldve</small>
             <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam dapibus interdum quam eu vulputate. Vestibulum pharetra scelerisque massa, et porta est pellentesque a. Pellentesque commodo hendrerit ante quis lobortis. Ut non magna elementum, interdum dui vitae, tincidunt dui. Integer at condimentum nisl. Curabitur fringilla mauris id justo pharetra tempor. Ut vulputate dapibus vehicula. Fusce volutpat gravida viverra. Ut tempor viverra leo, sed facilisis ante facilisis ac. Curabitur consectetur commodo convallis. Donec semper cursus suscipit.</p>
           </div>
         </div>
       </li>
     </ul>
   </div>
-  <div class="card-footer"> message</div>
-</di>
+  <div class="card-footer">
+    <form class="input-group" [formGroup]="form" (ngSubmit)="sendMessage()">
+      <input type="text" name="chat-message" formControlName="chat-message"
+             class="form-control" placeholder="üzenet..."
+             [ngClass]="{'is-invalid': invalidChatMessageInput}"
+             #chatMessageInput
+      >
+      <span class="input-group-btn">
+        <button class="btn btn-primary" type="submit">Küldés</button>
+      </span>
+    </form>
+  </div>
+</div>
