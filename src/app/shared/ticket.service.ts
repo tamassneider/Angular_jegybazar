@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {TicketModel} from './ticket-model';
-import {EventService} from './event.service';
+import {EventService} from '../event/event.service';
 import {UserService} from './user.service';
 import {Observable} from 'rxjs/Observable';
 import {HttpClient} from '@angular/common/http';

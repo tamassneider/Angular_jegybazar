@@ -13,7 +13,7 @@ import { HomeComponent } from './home/home.component';
 import {AppRoutingModule} from './app-routing';
 import { TicketComponent } from './ticket/ticket.component';
 import { TicketDetailComponent } from './ticket/ticket-detail/ticket-detail.component';
-import {EventService} from './shared/event.service';
+import {EventService} from './event/event.service';
 import {UserService} from './shared/user.service';
 import {AlertModule} from 'ngx-bootstrap';
 import {TicketService} from './shared/ticket.service';
@@ -30,6 +30,7 @@ import * as firebase from 'firebase';
 import {environment} from '../environments/environment';
 import {EventcardModule} from './event/event-card/eventcard.module';
 import {CoreModule} from './core/core.module';
+import {EventModule} from './event/event.module';
 
 
 @NgModule({
@@ -59,9 +60,10 @@ import {CoreModule} from './core/core.module';
     HttpClientModule,
     MomentModule,
     EventcardModule,
-    CoreModule
+    CoreModule,
+    EventModule.forRoot()
   ],
-  providers: [EventService,
+  providers: [
     UserService,
     TicketService,
     LoggedInGuard,

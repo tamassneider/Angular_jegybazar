@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TicketService} from '../../shared/ticket.service';
 import {UserService} from '../../shared/user.service';
-import {EventService} from '../../shared/event.service';
+import {EventService} from '../../event/event.service';
 import {TicketModel} from '../../shared/ticket-model';
 import {EventModel} from '../../shared/event-model';
 import {Observable} from 'rxjs/Observable';
