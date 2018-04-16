@@ -26,7 +26,7 @@ const routes: Routes = [
       {path: ':id', component: LicitComponent}
     ]
   },
-  {path: 'about', component: AboutComponent},
+  {path: 'about', loadChildren: 'app/about/about.module#AboutModule'},
   {
     path: 'user',
     children: [

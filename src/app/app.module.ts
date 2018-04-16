@@ -2,11 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { AppComponent } from './app.component';
-import { NavbarComponent } from './core/navbar/navbar.component';
-import { FooterComponent } from './core/footer/footer.component';
-import { JumbotronComponent } from './core/jumbotron/jumbotron.component';
 import { CardComponent } from './home/card/card.component';
-import { AboutComponent } from './about/about.component';
 import { TicketsTableComponent } from './ticket/tickets-table/tickets-table.component';
 import { SignInComponent } from './user/sign-in/sign-in.component';
 import { LicitComponent } from './ticket/licit/licit.component';
@@ -29,23 +25,17 @@ import { LicitCardComponent } from './ticket/licit-card/licit-card.component';
 import {MomentModule} from 'angular2-moment';
 import 'moment/locale/hu';
 import { BidFormComponent } from './ticket/bid-form/bid-form.component';
-import { LoadingSpinnerComponent } from './core/loading-spinner/loading-spinner.component';
 import {BidService} from './shared/bid.service';
 import * as firebase from 'firebase';
 import {environment} from '../environments/environment';
-import { NavbarItemComponent } from './core/navbar-item/navbar-item.component';
-import {EventModule} from './event/event.module';
 import {EventcardModule} from './event/event-card/eventcard.module';
+import {CoreModule} from './core/core.module';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
-    FooterComponent,
-    JumbotronComponent,
     CardComponent,
-    AboutComponent,
     TicketsTableComponent,
     SignInComponent,
     LicitComponent,
@@ -58,8 +48,6 @@ import {EventcardModule} from './event/event-card/eventcard.module';
     TicketDetailCardComponent,
     LicitCardComponent,
     BidFormComponent,
-    LoadingSpinnerComponent,
-    NavbarItemComponent,
   ],
   imports: [
     BrowserModule,
@@ -70,7 +58,8 @@ import {EventcardModule} from './event/event-card/eventcard.module';
     AppRoutingModule,
     HttpClientModule,
     MomentModule,
-    EventcardModule
+    EventcardModule,
+    CoreModule
   ],
   providers: [EventService,
     UserService,
