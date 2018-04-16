@@ -31,6 +31,7 @@ import {environment} from '../environments/environment';
 import {EventcardModule} from './event/event-card/eventcard.module';
 import {CoreModule} from './core/core.module';
 import {EventModule} from './event/event.module';
+import {ChatModule} from './chat/chat.module';
 
 
 @NgModule({
@@ -61,7 +62,8 @@ import {EventModule} from './event/event.module';
     MomentModule,
     EventcardModule,
     CoreModule,
-    EventModule.forRoot()
+    EventModule.forRoot(),
+    ChatModule.forRoot()
   ],
   providers: [
     UserService,
