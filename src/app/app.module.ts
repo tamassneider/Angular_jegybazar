@@ -32,6 +32,8 @@ import {EventcardModule} from './event/event-card/eventcard.module';
 import {CoreModule} from './core/core.module';
 import {EventModule} from './event/event.module';
 import {ChatModule} from './chat/chat.module';
+import {AngularFireModule} from 'angularfire2';
+import {AngularFireDatabase} from 'angularfire2/database';
 
 
 @NgModule({
@@ -63,7 +65,9 @@ import {ChatModule} from './chat/chat.module';
     EventcardModule,
     CoreModule,
     EventModule.forRoot(),
-    ChatModule.forRoot()
+    ChatModule.forRoot(),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabase
   ],
   providers: [
     UserService,
