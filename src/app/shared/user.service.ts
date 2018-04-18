@@ -17,6 +17,7 @@ import {UserModel} from './user-model';
   import {AngularFireDatabase} from 'angularfire2/database';
   import {User, UserInfo} from 'firebase';
   import 'rxjs/add/operator/first';
+  import Reference = firebase.database.Reference;
 
 @Injectable()
 export class UserService {
@@ -82,12 +83,12 @@ export class UserService {
   //     .map(usersObject => Object.values(usersObject).map(user => new UserModel(user)));
   // }
 
-  // addTicket(ticketId: string): Observable<string> {
-  //   return this._user.first().flatMap(
-  //     user => {
-  //       return this._afDb.list(`users/${user.id}/tickets`)
-  //         .push(ticketId)
-  //     });
-  // }
+  addTicket(ticketId: string): Observable<Reference> {
+    return this._user.first().flatMap(
+      user => {
+        return this._afDb.list(`users/${user.id}/tickets`)
+          .push(ticketId)
+      });
+  }
 
 }

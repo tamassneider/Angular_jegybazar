@@ -16,6 +16,8 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/combineLatest';
 import * as firebase from 'firebase';
 import 'rxjs/add/operator/first';
+import {AngularFireDatabase} from 'angularfire2/database';
+import 'rxjs/add/observable/fromPromise';
 
 
 @Injectable()
@@ -24,12 +26,11 @@ export class TicketService {
 
   constructor(private _eventService: EventService,
               private _userService: UserService,
-              private _http: HttpClient) {
+              private _afDb: AngularFireDatabase) {
   }
 
   getAllTickets() {
-    return this._http.get(`${environment.firebase.baseUrl}/tickets.json`)
-      .map(ticketObject => Object.values(ticketObject))
+    return this._afDb.list<TicketModel>(`tickets`).valueChanges()
       .map(ticketsArray => ticketsArray.map(tm =>
         Observable.zip(
           Observable.of(tm),
@@ -43,58 +44,52 @@ export class TicketService {
             };
           }
         )))
-      .switchMap(zipStremArray => Observable.forkJoin(zipStremArray))
-      .map(tickets => Object.values(tickets));
+      .switchMap(zipStremArray => Observable.forkJoin(zipStremArray));
   }
 
   create(param: TicketModel) {
-    return this._http
-      .post<{ name: string }>(`${environment.firebase.baseUrl}/tickets.json`, param)
-      .map(fbPostReturn => fbPostReturn.name)
-      .switchMap(ticketId => this._saveGeneratedId(ticketId))
-      .switchMap(ticketId => this._eventService.addTicket(param.eventId, ticketId))
-      // .switchMap(ticketId => this._userService.addTicket(ticketId));
+    return Observable.fromPromise (this._afDb.list('tickets').push(param))
+      .map(
+        resp => resp.key
+      )
+      .do(
+        key => Observable.combineLatest(
+          this._eventService.addTicket(param.eventId, key),
+          this._userService.addTicket(key)
+        )
+      );
   }
 
-  private _saveGeneratedId(ticketId: string): Observable<string> {
-    return this._http.patch<{ id: string }>(
-      `${environment.firebase.baseUrl}/tickets/${ticketId}.json`,
-      {id: ticketId}
-    )
-      .map(x => x.id);
-  }
+  // private _saveGeneratedId(ticketId: string): Observable<string> {
+  //   return this._http.patch<{ id: string }>(
+  //     `${environment.firebase.baseUrl}/tickets/${ticketId}.json`,
+  //     {id: ticketId}
+  //   )
+  //     .map(x => x.id);
+  // }
 
   getOneOnce(id: string): Observable<TicketModel> {
     return this.getOne(id).first();
   }
 
   getOne(id: string): Observable<TicketModel> {
-    return new Observable(
-      observer => {
-        const dbTicket = firebase.database().ref(`tickets/${id}`);
-        dbTicket.on('value',
-          snapshot => {
-          const ticket = snapshot.val();
-          const subscription = Observable.combineLatest(
-              Observable.of(new TicketModel(ticket)),
-              this._eventService.getEventById(ticket.eventId),
-              this._userService.getUserById(ticket.sellerUserId),
-              (t: TicketModel, e: EventModel, u: UserModel) => {
-                return t.setEvent(e).setSeller(u);
-              }).subscribe (
-                ticketModel => {
-                  observer.next(ticketModel);
-                  subscription.unsubscribe();
-                }
-            );
-          });
-      }
-    );
+    return this._afDb.object<TicketModel>(`tickets/${id}`).valueChanges()
+      .flatMap(
+        ticketFireBaseRemoteModel => {
+          return Observable.combineLatest(
+            Observable.of(new TicketModel(ticketFireBaseRemoteModel)),
+            this._eventService.getEventById(ticketFireBaseRemoteModel.eventId),
+            this._userService.getUserById(ticketFireBaseRemoteModel.sellerUserId),
+            (t: TicketModel, e: EventModel, u: UserModel) => {
+              return t.setEvent(e).setSeller(u);
+            });
+        }
+      );
   }
 
   modify(ticket: TicketModel) {
-    return this._http
-      .put(`${environment.firebase.baseUrl}/tickets/${ticket.id}.json`, ticket);
+    return Observable.fromPromise(this._afDb
+      .object(`tickets/${ticket.id}`).update(ticket));
   }
 
   // private _getMaxId() {
