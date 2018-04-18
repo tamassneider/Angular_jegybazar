@@ -25,7 +25,7 @@
 
     <div class="form-group">
       <label for="idopont">Esemény időpontja</label>
-      <input type="date" class="form-control mb-3" id="idopont" placeholder="Esemény időpontja"
+      <input type="datetime-local" class="form-control mb-3" id="idopont" placeholder="Esemény időpontja"
              [disabled]="viewForm"
              [(ngModel)]="event.date"
              name="date" required
@@ -51,7 +51,6 @@
       ></textarea>
     </div>
 
-    // buttons
     <div class="text-center mb-3">
     <ng-container *ngIf="userService.isLoggedIn$ | async">
 
@@ -64,7 +63,7 @@
       </ng-container>
       <ng-template #editButtons>
         <button class="btn btn-primary btn-lg" type="submit"
-                *ngIf="viewForm"
+                *ngIf="!viewForm"
                 [disabled]="eventForm.invalid"
         > Mentés </button>
         <button class="btn btn-primary btn-lg" type="button"
