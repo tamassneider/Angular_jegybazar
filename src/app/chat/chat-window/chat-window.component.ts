@@ -12,10 +12,11 @@ import {ChatService} from '../chat.service';
   selector: 'app-chat-chat-window',
   templateUrl: './chat-window.component.html',
   styleUrls: ['./chat-window.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [ChatService]
 })
 export class ChatWindowComponent implements OnInit, AfterViewChecked {
-  @Input() roomId = environment.production ? null : MockChatData.mockRoomId;
+  @Input() roomId; // = environment.production ? null : MockChatData.mockRoomId;
   resetForm = false;
   chatMessage$: Observable<ChatMessageModel[]>;
   @ViewChild('cardBody') cardBody: ElementRef;
@@ -26,6 +27,7 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
 
   ngOnInit() {
     this.chatMessage$ = this._chatService.getRoomMessages(this.roomId);
+    this.chatMessage$.subscribe(res => console.log(res))
   }
 
   onNewMessage(newMessage: string) {

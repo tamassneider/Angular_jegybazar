@@ -35,16 +35,4 @@ export const chatServiceProvideFactoryFn =
   ]
 })
 export class ChatModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: ChatModule,
-      providers: [
-        {
-          provide: ChatService,
-          useFactory: chatServiceProvideFactoryFn,
-          deps: [UserService]
-        }
-        ]
-    };
-  }
 }
