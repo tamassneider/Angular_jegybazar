@@ -20,10 +20,6 @@ export class EventService {
 
   getAllEvents(): Observable<EventModel[]> {
     return this._afDb.list<EventModel>(`events`).valueChanges()
-    //   .map(
-    //   events =>
-    //     events.map(event = new EventModel(events))
-    // );
   }
   getEventById(id: string) {
     return this._afDb.object<EventModel>(`events/${id}`).valueChanges()

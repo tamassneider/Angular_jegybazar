@@ -29,11 +29,12 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     this.ticket.eventId = '';
     this._userService.getCurrentUser()
       .subscribe( user => this.ticket.sellerUserId = user.id);
-    this.events = this._eventService.getAllEvents();
+     this.events = this._eventService.getAllEvents();
+    this._eventService.getAllEvents().subscribe(val => console.log(val))
   }
 
   ngOnDestroy() {
-    this._subs.unsubscribe();
+     if (this._subs) {this._subs.unsubscribe();}
   }
 
   onSubmit() {

@@ -1,4 +1,4 @@
-import {AfterViewChecked, ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewChecked, ChangeDetectionStrategy, Component, ElementRef, HostBinding, Input, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import 'rxjs/add/operator/skip';
 import 'rxjs/add/operator/distinctUntilChanged';
@@ -21,6 +21,8 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
   chatMessage$: Observable<ChatMessageModel[]>;
   @ViewChild('cardBody') cardBody: ElementRef;
   private shouldScroll = true;
+  private collapseBody: boolean;
+  @HostBinding('style.height') height = '100%';
 
   constructor(private _chatService: ChatService) {
   }
@@ -51,5 +53,14 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
       this.shouldScroll = false;
     }
 
+  }
+
+  collapseChat() {
+    this.collapseBody = !this.collapseBody;
+    if (this.collapseBody) {
+      this.height = null;
+    } else {
+      this.height = '100%';
+    }
   }
 }
