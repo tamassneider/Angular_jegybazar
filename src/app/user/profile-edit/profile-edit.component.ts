@@ -12,6 +12,7 @@ import {Observable} from 'rxjs/Observable';
 })
 export class ProfileEditComponent implements OnInit, OnDestroy {
   user: UserModel;
+  registerMode = false;
 
   private _destroy$ = new Subject();
 
@@ -20,7 +21,13 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._userService.getCurrentUser().subscribe(
-      user => this.user = user
+      user => {
+        this.user = user;
+        if (user == null) {
+          this.registerMode = true;
+          this.user = new UserModel();
+        }
+      }
     );
   }
 
@@ -30,20 +37,15 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   }
 
   updateUser() {
-    this._userService.save(this.user)
-      .takeUntil(this._destroy$)
-      .subscribe(
-        data => this._goToProfile(),
-        err => console.warn('problem when saving user: ', err)
-      );
+    this._userService.save(this.user);
+    this._goToProfile()
   }
 
   createUser (pass: string) {
     this._userService.register(this.user, pass)
-      .takeUntil(this._destroy$)
       .subscribe(
         data => this._goToProfile(),
-        err => console.warn('problem when registering user: ', err)
+        err => console.warn('regisztracios hiba: ', err)
       );
   }
 

@@ -13,6 +13,10 @@ import {UserModel} from './user-model';
   import {ReplaySubject} from 'rxjs/ReplaySubject';
   import * as firebase from 'firebase';
   import 'rxjs/add/observable/fromPromise';
+  import {AngularFireAuth} from 'angularfire2/auth';
+  import {AngularFireDatabase} from 'angularfire2/database';
+  import {User, UserInfo} from 'firebase';
+  import 'rxjs/add/operator/first';
 
 @Injectable()
 export class UserService {
@@ -22,15 +26,17 @@ export class UserService {
   private _fbAuthData: any;
 
   constructor(private _router: Router,
-              private _http: HttpClient) {
-    firebase.auth().onAuthStateChanged(
+             // private _http: HttpClient,
+              private _afAuth: AngularFireAuth,
+              private _afDb: AngularFireDatabase) {
+    this._afAuth.authState.subscribe(
       user => {
         if (user != null) {
-          this._fbAuthData = user;
-          this.getUserById(user.uid).subscribe(remoteUser => this._user.next(remoteUser));
-          this.isLoggedIn$.next(true);
+          this.getUserById(user.uid).subscribe(remoteUser => {
+            this._user.next(remoteUser);
+            this.isLoggedIn$.next(true);
+          });
         } else {
-          this._fbAuthData = null;
           this._user.next(null);
           this.isLoggedIn$.next(false);
         }
@@ -38,70 +44,50 @@ export class UserService {
     );
   }
 
-  get fbIdToken(): string | null {
-    return this._fbAuthData ? this._fbAuthData.idToken : null;
-  }
-
   login(email: string, password: string): Observable<UserModel | void> {
-    return Observable.fromPromise(firebase.auth()
-      .signInWithEmailAndPassword(email, password));
+    return Observable.fromPromise(this._afAuth.auth.signInWithEmailAndPassword(email, password));
   }
 
   register(param: UserModel, password: string) {
-    return this._http.post<FirebaseRegistrationModel>(
-      `${environment.firebase.registerUrl}?key=${environment.firebase.apiKey}`,
-      {
-        'email': param.email,
-        'password': password,
-        'returnSecureToken': true
-      }
+    return Observable.fromPromise(
+      this._afAuth.auth.createUserWithEmailAndPassword(param.email, password)
     )
-      .do((fbAuthResponse: FirebaseRegistrationModel) => this._fbAuthData = fbAuthResponse)
-      .map(fbreg => {
-        return {
-        id: fbreg.localId,
-      ...param
-        };
-      })
-      .switchMap(user => this.save(user))
-      .do (user => console.log('succesful registration with user ', user));
+      .do(
+        (user: UserInfo) => this.save({...param, id: user.uid})
+      );
   }
 
   save(param: UserModel) {
-    return this._http.put<UserModel>(
-      `${environment.firebase.baseUrl}/users/${param.id}.json`, param);
+    return this._afDb.object(`users/${param.id}`).set(param)
+      .then(
+        user => user
+      );
   }
 
   logout() {
-    firebase.auth().signOut();
+    this._afAuth.auth.signOut();
     this._router.navigate(['/home']);
   }
 
   getUserById(fbid: string) {
-    return this._http.get<UserModel>(`${environment.firebase.baseUrl}/users/${fbid}.json`);
+    return this._afDb.object<UserModel>(`users/${fbid}`).valueChanges();
   }
 
   getCurrentUser() {
    return this._user.asObservable();
   }
 
-  getAllUsers() {
-    this._http.get(`${environment.firebase.baseUrl}/users.json`)
-      .map(usersObject => Object.values(usersObject).map(user => new UserModel(user)));
-  }
+  // getAllUsers() {
+  //   this._http.get(`${environment.firebase.baseUrl}/users.json`)
+  //     .map(usersObject => Object.values(usersObject).map(user => new UserModel(user)));
+  // }
 
-  addTicket(ticketId: string): Observable<string> {
-    return this._user.flatMap(
-      user => {
-        return this._http.patch(
-          `${environment.firebase.baseUrl}/users/${user.id}/tickets.json`,
-          {[ticketId]: true}
-        )
-          .map(rel => Object.keys(rel)[0]);
-      }
-    );
-
-
-  }
+  // addTicket(ticketId: string): Observable<string> {
+  //   return this._user.first().flatMap(
+  //     user => {
+  //       return this._afDb.list(`users/${user.id}/tickets`)
+  //         .push(ticketId)
+  //     });
+  // }
 
 }

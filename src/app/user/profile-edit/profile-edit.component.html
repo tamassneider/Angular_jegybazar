@@ -2,7 +2,9 @@
 
 
   <!--Form with header-->
-  <div class="card mb-4 col-11 col-sm-8 mx-auto p-0">
+  <div class="card mb-4 col-11 col-sm-8 mx-auto p-0"
+       *ngIf="user != null || registerMode == true;else loading"
+  >
 
     <div class="card-header">
       <div class="bg-light text-center">
@@ -133,5 +135,7 @@
 
 
   </div>
-
+  <ng-template #loading>
+    <app-loading-spinner [loaderWidth]="100" [loaderWidth]="100"></app-loading-spinner>
+  </ng-template>
 </div>

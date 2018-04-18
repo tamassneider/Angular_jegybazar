@@ -53,7 +53,7 @@ export class TicketService {
       .map(fbPostReturn => fbPostReturn.name)
       .switchMap(ticketId => this._saveGeneratedId(ticketId))
       .switchMap(ticketId => this._eventService.addTicket(param.eventId, ticketId))
-      .switchMap(ticketId => this._userService.addTicket(ticketId));
+      // .switchMap(ticketId => this._userService.addTicket(ticketId));
   }
 
   private _saveGeneratedId(ticketId: string): Observable<string> {
