@@ -87,6 +87,16 @@
                >
       </div>
 
+      <div class="form-group">
+        <label for="picture">Cím</label>
+        <input type="text" class="form-control mb-3" id="picture" placeholder="kép url"
+               [(ngModel)]="user.profilePictureUrl"
+               name="picture"
+               required
+               #picture="ngModel"
+        >
+      </div>
+
       <ng-container *ngIf="!user.id">
         <div class="form-group">
           <label for="jelszo1">Jelszó</label>
