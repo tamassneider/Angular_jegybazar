@@ -20,8 +20,8 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
   resetForm = false;
   chatMessage$: Observable<ChatMessageModel[]>;
   @ViewChild('cardBody') cardBody: ElementRef;
-  private shouldScroll = true;
-  private collapseBody: boolean;
+  private shouldScroll = false;
+  collapseBody: boolean;
   @HostBinding('style.height') height = '100%';
 
   constructor(private _chatService: ChatService) {
@@ -29,7 +29,12 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
 
   ngOnInit() {
     this.chatMessage$ = this._chatService.getRoomMessages(this.roomId);
-    this.chatMessage$.subscribe(res => console.log(res))
+    this.chatMessage$.first().subscribe(
+      () => {
+        this.shouldScroll = true;
+        this.ngAfterViewChecked();
+      }
+    );
   }
 
   onNewMessage(newMessage: string) {
