@@ -8,5 +8,5 @@
 
 <!-- footer -->
 <app-footer></app-footer>
-<app-chat></app-chat>
+<app-chat *ngIf="isLoggedIn$ | async"></app-chat>
 
