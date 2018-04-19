@@ -1,4 +1,14 @@
-import {AfterViewChecked, ChangeDetectionStrategy, Component, ElementRef, HostBinding, Input, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef, EventEmitter,
+  HostBinding,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import 'rxjs/add/operator/skip';
 import 'rxjs/add/operator/distinctUntilChanged';
@@ -9,14 +19,18 @@ import {Observable} from 'rxjs/Observable';
 import {ChatService} from '../chat.service';
 
 @Component({
-  selector: 'app-chat-chat-window',
+  selector: 'app-chat-window',
   templateUrl: './chat-window.component.html',
   styleUrls: ['./chat-window.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ChatService]
 })
 export class ChatWindowComponent implements OnInit, AfterViewChecked {
+  @Input() id: string;
   @Input() roomId; // = environment.production ? null : MockChatData.mockRoomId;
+  @Input() title: string;
+  @Input() closeable = false;
+  @Output() close = new EventEmitter<void>();
   resetForm = false;
   chatMessage$: Observable<ChatMessageModel[]>;
   @ViewChild('cardBody') cardBody: ElementRef;
@@ -67,5 +81,9 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
     } else {
       this.height = '100%';
     }
+  }
+
+  closeWindow() {
+    this.close.emit();
   }
 }
