@@ -8,7 +8,7 @@ import { ChatWindowConfig } from '../model/chat-window.config';
   styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit {
-  windows$ = new BehaviorSubject<ChatWindowConfig[]>([])
+  windows$ = new BehaviorSubject<ChatWindowConfig[]>([]);
 
   constructor() { }
 
@@ -16,6 +16,10 @@ export class ChatComponent implements OnInit {
     this.openChat({
       title: 'test ablak',
       roomId: 'testelo',
+    });
+    this.openChat({
+      title: 'test ablak2',
+      roomId: 'testelo2',
     });
   }
 
