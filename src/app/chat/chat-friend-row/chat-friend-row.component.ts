@@ -1,14 +1,26 @@
-import {AfterViewInit, ChangeDetectorRef, Component, HostBinding, HostListener, Input, OnInit} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  Input,
+  OnChanges,
+  Output, SimpleChanges
+} from '@angular/core';
 import {ChatFriendModel} from '../model/chat-friend.model';
 import {Subject} from 'rxjs/Subject';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-chat-friend-row',
   templateUrl: './chat-friend-row.component.html',
   styleUrls: ['./chat-friend-row.component.css']
 })
-export class ChatFriendRowComponent implements AfterViewInit {
+export class ChatFriendRowComponent implements AfterViewInit, OnChanges {
   @Input() friend: ChatFriendModel;
+  @Output() select = new EventEmitter<ChatFriendModel>();
   @HostBinding('class.clearfix') classClearFix = true;
   @HostBinding('class.text-muted') classTextMuted = true;
   @HostBinding('class.focused') classFocused = false;
@@ -51,7 +63,11 @@ export class ChatFriendRowComponent implements AfterViewInit {
     $event.stopPropagation();
     $event.preventDefault();
 
-    console.log('click');
+    this.select.emit(this.friend);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+
   }
 
 }

@@ -8,6 +8,7 @@
         <app-chat-friend-row *ngFor="let friend of friendList"
                              [friend]="friend"
                              class="friend-list"
+                             (select)="onSelectFriend($event)"
         ></app-chat-friend-row>
       </ul>
     </ng-container>
