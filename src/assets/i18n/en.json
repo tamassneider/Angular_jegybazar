@@ -2,8 +2,11 @@
   "SIMPLE": "Sima szöveg",
   "WITHVARIABLE": "Hi {{variableValue}}",
   "APP": {
-    "TITLE": "Events bid"
+    "TITLE": "Jegybazár"
   },
   "EVENTS": {},
-  "TICKETS": {}
+  "TICKETS": {},
+  "HOME": {
+    "EVENTS": "Events"
+  }
 }

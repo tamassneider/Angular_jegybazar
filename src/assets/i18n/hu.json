@@ -5,5 +5,8 @@
     "TITLE": "Jegybazár"
   },
   "EVENTS": {},
-  "TICKETS": {}
+  "TICKETS": {},
+  "HOME": {
+    "EVENTS": "Események"
+  }
 }
