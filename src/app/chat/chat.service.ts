@@ -7,10 +7,12 @@ import * as moment from 'moment';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 import {ChatFriendModel} from './model/chat-friend.model';
+import {ChatCallModel} from './model/chat-call.model';
 
 @Injectable()
 export class ChatService {
   private static  PATH = 'chat';
+  public currentUserId: string;
 
   constructor(protected _userService: UserService,
               @Optional() protected afDb?: AngularFireDatabase) { }
@@ -77,6 +79,44 @@ export class ChatService {
           return this.afDb.list<ChatFriendModel>(`chat_friend_list/${user.id}`).valueChanges();
         }
       );
+  }
+
+  addChatWait(roomId: string, friend: ChatFriendModel) {
+    this._userService.getCurrentUser().first().
+      subscribe (
+        user => {
+          this.afDb.object(`chat_wait/${friend.$id}/${user.id}`)
+            .set({
+              'roomId': roomId,
+              'friend': new ChatFriendModel({
+                $id: user.id,
+                name: user.name,
+                profilePictureUrl: user.profilePictureUrl})
+            });
+        }
+    );
+  }
+
+  getChatCallWatcher() {
+    this._userService.getCurrentUser().first().subscribe(user => this.currentUserId = user.id)
+    return this.afDb.list(`chat_wait/${this.currentUserId}`).valueChanges()
+       .map(
+         calls => Object.values(calls)
+            .map(
+                call =>
+                  new ChatCallModel({
+                    $id: '',
+                    roomId: call.roomId,
+                    friend: new ChatFriendModel(
+                     {
+                       $id: '',
+                       name: '',
+                       profilePictureUrl: ''
+                     }
+                   )
+                 })
+              )
+           );
   }
 
 }
