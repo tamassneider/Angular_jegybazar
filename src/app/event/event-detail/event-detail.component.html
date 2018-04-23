@@ -9,7 +9,7 @@
   </div>
   <!--card-body-->
   <div class="card-body">
-  <form #eventForm="ngForm" (ngSubmit)="onSubmit()">
+  <form #eventForm="ngForm" (ngSubmit)="onSubmit(eventForm)">
     <div class="form-group">
       <label for="esemeny">Esemény címe:</label>
       <input type="text" class="form-control mb-3" id="esemeny"

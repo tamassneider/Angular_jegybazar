@@ -19,7 +19,7 @@ import {AlertModule} from 'ngx-bootstrap';
 import {TicketService} from './shared/ticket.service';
 import {LoggedInGuard} from './shared/logged-in.guard';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import { TicketDetailCardComponent } from './ticket/ticket-detail-card/ticket-detail-card.component';
 import { LicitCardComponent } from './ticket/licit-card/licit-card.component';
 import {MomentModule} from 'angular2-moment';
@@ -35,7 +35,12 @@ import {ChatModule} from './chat/chat.module';
 import {AngularFireModule} from 'angularfire2';
 import {AngularFireDatabaseModule} from 'angularfire2/database';
 import {AngularFireAuthModule} from 'angularfire2/auth';
+import {TranslateModule, TranslateLoader, TranslateService} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
+export function createTranslateLoader (http: HttpClient) {
+  return new TranslateHttpLoader (http, './assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -69,7 +74,14 @@ import {AngularFireAuthModule} from 'angularfire2/auth';
     ChatModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (createTranslateLoader),
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [
     UserService,
@@ -80,7 +92,9 @@ import {AngularFireAuthModule} from 'angularfire2/auth';
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor() {
+  constructor(translateService: TranslateService) {
     firebase.initializeApp(environment.firebase);
+    translateService.setDefaultLang('hu');
+    translateService.use('en');
   }
 }

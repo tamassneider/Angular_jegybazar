@@ -1,4 +1,10 @@
 <!--The content below is only a placeholder and can be replaced.-->
+<h3>interpolation</h3>
+<p>{{'SIMPLE' | translate}}</p>
+<p>{{'WITHVARIABLE' | translate:translateVariable}}</p>
+<h3>directives</h3>
+<p translate>SIMPLE</p>
+<p translate="WITHVARIABLE" [translateParams]="translateVariable"></p>
 <div class="content-container">
 
   <!-- navbar -->

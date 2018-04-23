@@ -9,6 +9,7 @@ import {ReplaySubject} from 'rxjs/ReplaySubject';
 })
 export class AppComponent {
   isLoggedIn$: ReplaySubject<boolean>;
+  translateVariable = {variableValue: 'valtozo szoveg'};
 
   constructor(userService: UserService) {
     this.isLoggedIn$ = userService.isLoggedIn$;
