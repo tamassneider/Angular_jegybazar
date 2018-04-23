@@ -7,12 +7,14 @@ import {LoadingSpinnerComponent} from './loading-spinner/loading-spinner.compone
 import {NavbarItemComponent} from './navbar-item/navbar-item.component';
 import {CollapseModule} from 'ngx-bootstrap';
 import {RouterModule} from '@angular/router';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   imports: [
     CommonModule,
     CollapseModule,
-    RouterModule
+    RouterModule,
+    TranslateModule
   ],
   declarations: [
     NavbarComponent,

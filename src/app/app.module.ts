@@ -95,6 +95,6 @@ export class AppModule {
   constructor(translateService: TranslateService) {
     firebase.initializeApp(environment.firebase);
     translateService.setDefaultLang('hu');
-    translateService.use('en');
+    translateService.use('hu');
   }
 }

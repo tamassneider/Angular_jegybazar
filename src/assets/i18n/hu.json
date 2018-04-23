@@ -1,4 +1,9 @@
 {
   "SIMPLE": "Sima szöveg",
-  "WITHVARIABLE": "Hi {{variableValue}}"
+  "WITHVARIABLE": "Hi {{variableValue}}",
+  "APP": {
+    "TITLE": "Jegybazár"
+  },
+  "EVENTS": {},
+  "TICKETS": {}
 }
